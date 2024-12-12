@@ -38,6 +38,10 @@
         "noUnreachable": "error",
         "useJsxKeyInIterable": "error",
         "useHookAtTopLevel": "error",
+        "useExhaustiveDependencies": "error",
+        "noConstantCondition": "error",
+        "noConstantMathMinMaxClamp": "error",
+        "useIsNan": "error",
         "noUnusedImports": {
           "level": "error",
           "fix": "safe"
