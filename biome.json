@@ -3,7 +3,7 @@
   "vcs": { "enabled": false, "clientKind": "git", "useIgnoreFile": false },
   "files": {
     "ignoreUnknown": false,
-    "ignore": ["**/*.js*", "src/utils/platformUtils.tsx", ".react-email", ".next", "src/scripts", "coverage"]
+    "ignore": ["src/env.js"]
   },
   "formatter": {
     "enabled": true,
@@ -12,7 +12,7 @@
     "lineWidth": 100,
     "lineEnding": "lf"
   },
-  "organizeImports": { "enabled": true, "ignore": ["src/__tests__"] },
+  "organizeImports": { "enabled": true },
   "linter": {
     "enabled": true,
     "rules": {
@@ -23,10 +23,7 @@
         "noUselessTypeConstraint": "error",
         "useLiteralKeys": "error",
         "useOptionalChain": { "level": "error", "fix": "safe" },
-        "noExcessiveCognitiveComplexity": {
-          "level": "warn",
-          "options": { "maxAllowedComplexity": 45 }
-        },
+        "noExcessiveCognitiveComplexity": "warn",
         "noUselessStringConcat": "error",
         "noUselessTernary": "error",
         "noUselessUndefinedInitialization": "error",
