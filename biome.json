@@ -1,59 +1,89 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
   "vcs": { "enabled": false, "clientKind": "git", "useIgnoreFile": false },
-  "files": { "ignoreUnknown": false, "ignore": [] },
+  "files": {
+    "ignoreUnknown": false,
+    "ignore": ["**/*.js*", "src/utils/platformUtils.tsx", ".react-email", ".next", "src/scripts", "coverage"]
+  },
   "formatter": {
     "enabled": true,
-    "useEditorconfig": true,
-    "formatWithErrors": false,
     "indentStyle": "space",
     "indentWidth": 2,
-    "lineEnding": "lf",
-    "lineWidth": 80,
-    "attributePosition": "auto",
-    "bracketSpacing": true
+    "lineWidth": 100,
+    "lineEnding": "lf"
   },
-  "organizeImports": { "enabled": true },
+  "organizeImports": { "enabled": true, "ignore": ["src/__tests__"] },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": false,
       "complexity": {
+        "noBannedTypes": "error",
+        "noUselessThisAlias": "error",
         "noUselessTypeConstraint": "error",
         "useLiteralKeys": "error",
-        "useOptionalChain": "error"
+        "useOptionalChain": { "level": "error", "fix": "safe" },
+        "noExcessiveCognitiveComplexity": {
+          "level": "warn",
+          "options": { "maxAllowedComplexity": 45 }
+        },
+        "noUselessStringConcat": "error",
+        "noUselessTernary": "error",
+        "noUselessUndefinedInitialization": "error",
+        "useArrowFunction": "error",
+        "useFlatMap": "error"
       },
-      "correctness": { "noUnusedVariables": "off", "useArrayLiterals": "off" },
+      "correctness": {
+        "noPrecisionLoss": "error",
+        "noUnusedVariables": "error",
+        "useArrayLiterals": "off",
+        "noConstAssign": "error",
+        "noUnreachable": "error",
+        "useJsxKeyInIterable": "error",
+        "useHookAtTopLevel": "error",
+        "noUnusedImports": {
+          "level": "error",
+          "fix": "safe"
+        }
+      },
       "style": {
+        "noDoneCallback": "error",
         "noInferrableTypes": "error",
         "noNamespace": "error",
         "useAsConstAssertion": "error",
-        "useConsistentArrayType": "off",
+        "useBlockStatements": "off",
+        "noYodaExpression": "error",
+        "useConsistentArrayType": {
+          "level": "error",
+          "options": {
+            "syntax": "shorthand"
+          }
+        },
         "useForOf": "error",
+        "useImportType": "error",
         "useShorthandFunctionType": "error"
       },
       "suspicious": {
         "noEmptyBlockStatements": "error",
+        "noEmptyInterface": "error",
         "noExplicitAny": "error",
+        "noExportsInTest": "error",
         "noExtraNonNullAssertion": "error",
+        "noFocusedTests": "error",
         "noMisleadingInstantiator": "error",
+        "noMisplacedAssertion": "error",
+        "noSkippedTests": "warn",
         "noUnsafeDeclarationMerging": "error",
-        "useAwait": "off",
-        "useNamespaceKeyword": "error"
+        "useAwait": "error",
+        "useNamespaceKeyword": "error",
+        "noCommentText": "error",
+        "noSelfCompare": "error",
+        "noConsoleLog": "warn"
+      },
+      "nursery": {
+        "noProcessEnv": "warn"
       }
-    }
-  },
-  "javascript": {
-    "formatter": {
-      "jsxQuoteStyle": "double",
-      "quoteProperties": "asNeeded",
-      "trailingCommas": "all",
-      "semicolons": "asNeeded",
-      "arrowParentheses": "always",
-      "bracketSameLine": false,
-      "quoteStyle": "single",
-      "attributePosition": "auto",
-      "bracketSpacing": true
-    }
+    },
+    "ignore": [".next"]
   }
 }
