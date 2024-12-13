@@ -85,6 +85,6 @@
         "noProcessEnv": "warn"
       }
     },
-    "ignore": [".next"]
+    "ignore": [".next", "src/trpc/react.tsx"]
   }
 }

@@ -6,11 +6,12 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@/server/db";
+import { getCurrentSession } from "../auth/cookies";
 
 /**
  * 1. CONTEXT
@@ -51,6 +52,8 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
   },
 });
 
+export const router = t.router;
+
 /**
  * Create a server-side caller.
  *
@@ -80,3 +83,11 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 export const publicProcedure = t.procedure;
+
+export const protectedProcedure = publicProcedure.use(async ({ next, ctx }) => {
+  const session = await getCurrentSession();
+  if (!session.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return next({ ctx: { ...ctx, ...session } });
+});

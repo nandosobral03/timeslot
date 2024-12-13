@@ -11,6 +11,11 @@ export const env = createEnv({
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
     PORT: z.coerce.number().default(3000),
     VERCEL_URL: z.string().url().optional(),
+    GOOGLE_CLIENT_ID: z.string(),
+    GOOGLE_CLIENT_SECRET: z.string(),
+    IMGUR_TOKEN: z.string(),
+    IMGUR_CLIENT_ID: z.string(),
+    YOUTUBE_API_KEY: z.string(),
   },
 
   /**
@@ -19,7 +24,7 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string(),
+    NEXT_PUBLIC_API_URL: z.string().url(),
   },
 
   /**
@@ -31,7 +36,12 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     PORT: process.env.PORT,
     VERCEL_URL: process.env.VERCEL_URL,
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    IMGUR_TOKEN: process.env.IMGUR_TOKEN,
+    IMGUR_CLIENT_ID: process.env.IMGUR_CLIENT_ID,
+    YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY,
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
