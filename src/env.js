@@ -14,7 +14,6 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
     IMGUR_TOKEN: z.string(),
-    IMGUR_CLIENT_ID: z.string(),
     YOUTUBE_API_KEY: z.string(),
   },
 
@@ -25,6 +24,7 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_API_URL: z.string().url(),
+    NEXT_PUBLIC_IMGUR_CLIENT_ID: z.string(),
   },
 
   /**
@@ -39,7 +39,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     IMGUR_TOKEN: process.env.IMGUR_TOKEN,
-    IMGUR_CLIENT_ID: process.env.IMGUR_CLIENT_ID,
+    NEXT_PUBLIC_IMGUR_CLIENT_ID: process.env.NEXT_PUBLIC_IMGUR_CLIENT_ID,
     YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },

@@ -76,7 +76,7 @@ model Video {
   title          String
   thumbnail      String
   duration       Int
-  category       String
+  category       String?
   youtubeChannel String
   videoStations  VideoStation[]
   scheduleItems  ScheduleItem[]
@@ -91,6 +91,7 @@ model VideoStation {
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([videoId, stationId, userId])
+  @@unique([videoId, stationId])
 }
 
 model ScheduleItem {

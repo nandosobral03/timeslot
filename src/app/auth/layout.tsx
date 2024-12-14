@@ -1,5 +1,3 @@
-"use client";
-
 import { HydrateClient } from "@/trpc/server";
 import { ThemeProvider } from "next-themes";
 

@@ -27,7 +27,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+    --radius: 0.2rem;
   }
   .dark {
     --background: 20 14.3% 4.1%;
@@ -44,7 +44,7 @@
     --muted-foreground: 24 5.4% 63.9%;
     --accent: 353 50% 50%;
     --accent-foreground: 353 50% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 60% 45%;
     --destructive-foreground: 60 9.1% 97.8%;
     --border: 12 6.5% 15.1%;
     --input: 12 6.5% 15.1%;
