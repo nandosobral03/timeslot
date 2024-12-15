@@ -57,8 +57,8 @@ export default function EditStationBasicDetails({ form, tagOptions }: { form: Us
                 <div className="flex flex-col gap-4">
                   {field.value && <Image src={field.value} alt="Station thumbnail" width={200} height={200} className="rounded-md" />}
                   <ImageUploaderButton
-                    onUpload={(file) => {
-                      field.onChange(URL.createObjectURL(file));
+                    onUpload={(url) => {
+                      field.onChange(url);
                     }}
                   />
                 </div>

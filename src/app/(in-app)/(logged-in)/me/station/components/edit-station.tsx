@@ -7,10 +7,12 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import EditStationBasicDetails from "./edit-station-basic-details";
 import EditStationVideos from "./edit-station-videos";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 export type EditStationForm = Station & { tags: Tag[] } & { videos: Video[] };
 
-export default function EditStationPage({ station, tagOptions, onSubmit }: { station: Omit<EditStationForm, "userId" | "createdAt">; tagOptions: Tag[]; onSubmit: (data: EditStationForm) => void }) {
+export default function EditStationPage({ station, tagOptions, onSubmit, isLoading }: { station: Omit<EditStationForm, "userId" | "createdAt">; tagOptions: Tag[]; onSubmit: (data: EditStationForm) => void; isLoading: boolean }) {
   const form = useForm<EditStationForm>({
     defaultValues: {
       name: station.name,
@@ -19,6 +21,7 @@ export default function EditStationPage({ station, tagOptions, onSubmit }: { sta
       isPublic: station.isPublic,
       isRandomized: station.isRandomized,
       tags: station.tags,
+      videos: station.videos,
     },
     resolver: zodResolver(
       z.object({
@@ -27,6 +30,8 @@ export default function EditStationPage({ station, tagOptions, onSubmit }: { sta
         thumbnail: z.string(),
         isPublic: z.boolean(),
         isRandomized: z.boolean(),
+        tags: z.array(z.object({ id: z.string(), name: z.string() })),
+        videos: z.array(z.object({ id: z.string(), title: z.string() })),
       })
     ),
   });
@@ -35,8 +40,10 @@ export default function EditStationPage({ station, tagOptions, onSubmit }: { sta
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <EditStationBasicDetails form={form} tagOptions={tagOptions} />
-        {/* Add more sections here if needed */}
         <EditStationVideos form={form} />
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? <Loader2 className="animate-spin" /> : "Save"}
+        </Button>
       </form>
     </Form>
   );

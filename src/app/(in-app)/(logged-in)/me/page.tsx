@@ -1,10 +1,10 @@
 import { Suspense } from "react";
 import { api } from "@/trpc/server";
 import Image from "next/image";
-import UpdatePasswordButton from "./update-password-button";
-import UpdateDisplayNameButton from "./update-display-name-button";
+import UpdatePasswordButton from "./profile/update-password-button";
+import UpdateDisplayNameButton from "./profile/update-display-name-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import MyStations from "./my-stations";
+import MyStations from "./station/components/my-stations";
 
 export default async function MePage() {
   const user = await api.users.getCurrentUser();
@@ -13,7 +13,7 @@ export default async function MePage() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <div className="container mx-auto p-4">
+      <div className="container mx-auto p-4 flex flex-col gap-4">
         <Card>
           <CardHeader>
             <CardTitle>My Profile</CardTitle>

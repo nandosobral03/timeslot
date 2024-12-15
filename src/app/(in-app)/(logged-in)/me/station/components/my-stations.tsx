@@ -14,14 +14,14 @@ export default function MyStations({ stations }: { stations: Station[] }) {
             <CardDescription>Manage your stations</CardDescription>
           </div>
           <Button asChild>
-            <Link href="/me/create-station">Create New Station</Link>
+            <Link href="/me/station/create">Create New Station</Link>
           </Button>
         </div>
       </CardHeader>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {stations?.map((station) => (
-          <Link href={`/stations/${station.id}`} key={station.id}>
+          <Link href={`/me/station/${station.id}`} key={station.id}>
             <div className="hover:shadow-lg transition-shadow rounded-lg border p-4">
               <div className="pb-2">
                 <h3 className="text-lg font-semibold">{station.name}</h3>

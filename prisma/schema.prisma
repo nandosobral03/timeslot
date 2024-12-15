@@ -65,7 +65,7 @@ model Station {
   isRandomized  Boolean        @default(false)
   tags          Tag[]
   scheduleItems ScheduleItem[]
-  videoStations VideoStation[]
+  videos VideoStation[]
   comments      Comment[]
   followers     User[]         @relation("station-followers")
   adClip        String?        @default("default-ad.mp4")
@@ -78,7 +78,7 @@ model Video {
   duration       Int
   category       String?
   youtubeChannel String
-  videoStations  VideoStation[]
+  stations  VideoStation[]
   scheduleItems  ScheduleItem[]
 }
 

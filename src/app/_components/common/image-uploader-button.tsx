@@ -6,7 +6,7 @@ import { Loader2, Upload } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export default function ImageUploaderButton({ onUpload }: { onUpload: (file: File) => void }) {
+export default function ImageUploaderButton({ onUpload }: { onUpload: (url: string) => void }) {
   const [isUploading, setIsUploading] = useState(false);
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,8 +51,8 @@ export default function ImageUploaderButton({ onUpload }: { onUpload: (file: Fil
         return;
       }
 
-      // Call onUpload with the file and notify success
-      onUpload(file);
+      // Call onUpload with the image URL and notify success
+      onUpload(data.data.link);
       toast.success("Image uploaded successfully!");
     } catch (error) {
       if (error instanceof Error) {
@@ -70,7 +70,7 @@ export default function ImageUploaderButton({ onUpload }: { onUpload: (file: Fil
   };
 
   return (
-    <Button variant="outline" disabled={isUploading} onClick={() => document.getElementById("image-upload")?.click()}>
+    <Button variant="outline" disabled={isUploading} onClick={() => document.getElementById("image-upload")?.click()} type="button">
       {isUploading ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
