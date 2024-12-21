@@ -12,7 +12,7 @@ import { Card, CardContent } from "@/components/ui/card";
 interface AddVideoAtTimeModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onVideoSelected: (video: Video | { id: string; duration: number }) => void;
+  onVideoSelected: (video: Video | { duration: number }) => void;
 }
 
 export default function AddVideoAtTimeModal({ isOpen, onClose, onVideoSelected }: AddVideoAtTimeModalProps) {
@@ -31,7 +31,6 @@ export default function AddVideoAtTimeModal({ isOpen, onClose, onVideoSelected }
     if (totalSeconds > 0 && totalSeconds <= 86340) {
       // 23:59:00 in seconds
       onVideoSelected({
-        id: `empty-${Date.now()}`,
         duration: totalSeconds,
       });
       onClose();

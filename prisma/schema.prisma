@@ -97,11 +97,12 @@ model VideoStation {
 model ScheduleItem {
   id         String   @id @default(cuid())
   stationId  String
-  videoId    String
+  videoId    String?
   dayOfWeek  Int
   startTime  DateTime
   station    Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
-  video      Video    @relation(fields: [videoId], references: [id])
+  video      Video?   @relation(fields: [videoId], references: [id])
+  duration   Int
 }
 
 model Tag {

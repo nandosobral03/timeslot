@@ -10,6 +10,7 @@ import type { Video } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { formatTime } from "@/lib/utils";
 
 const getGradientColor = (id: string) => {
   const colors = ["from-blue-500 to-cyan-500", "from-purple-500 to-pink-500", "from-green-500 to-emerald-500", "from-yellow-500 to-orange-500", "from-red-500 to-rose-500", "from-indigo-500 to-violet-500", "from-teal-500 to-green-500"];
@@ -18,13 +19,7 @@ const getGradientColor = (id: string) => {
   return colors[sum % colors.length]!;
 };
 
-const formatTime = (seconds: number) => {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
-};
-
-type EmptySpace = { id: string; duration: number };
+type EmptySpace = { duration: number };
 
 const DayColumn = ({ day, dayWidth, hourHeight, items, onUpdate }: { day: string; dayWidth: number; hourHeight: number; items: SchedulerItem[]; onUpdate: (newOrder: SchedulerItem[]) => void }) => {
   const pixelsPerSecond = hourHeight / 3600;
@@ -43,8 +38,10 @@ const DayColumn = ({ day, dayWidth, hourHeight, items, onUpdate }: { day: string
       isPartial: false,
       originalDuration: video.duration,
       isMovable: true,
+      videoId: "id" in video ? video.id : undefined,
     };
-    const newOrder = [...items.slice(0, clickedIndex), newItem, ...items.slice(clickedIndex)];
+
+    const newOrder = [...items.slice(0, clickedIndex), newItem, ...items.slice(clickedIndex)] as SchedulerItem[];
 
     onUpdate(newOrder);
     setClickedIndex(null);
@@ -72,7 +69,7 @@ const DayColumn = ({ day, dayWidth, hourHeight, items, onUpdate }: { day: string
               const endSeconds = startSeconds + item.durationInSeconds;
               const topPosition = startSeconds * pixelsPerSecond;
               const height = item.durationInSeconds * pixelsPerSecond;
-              const gradientClass = getGradientColor(item.id);
+              const gradientClass = getGradientColor(item.videoId ?? "deadair");
               return (
                 <Fragment key={item.id}>
                   <ScheduleItem item={item} startSeconds={startSeconds} endSeconds={endSeconds} topPosition={topPosition} height={height} gradientClass={gradientClass} onDelete={handleDelete} />

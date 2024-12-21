@@ -3,6 +3,11 @@
 import { useState, useMemo } from "react";
 import TimeColumn from "./time-column";
 import DayColumn from "./day-column";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { api } from "@/trpc/react";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type SchedulerProps = {
   items: {
@@ -11,10 +16,12 @@ type SchedulerProps = {
     title?: string;
     index: number;
     durationInSeconds: number;
+    videoId?: string;
   }[];
+  stationId: string;
 };
 
-export type SchedulerItem = { id: string; image?: string; title?: string; index: number; durationInSeconds: number; isPartial: boolean; originalDuration: number; isMovable: boolean };
+export type SchedulerItem = { id: string; image?: string; title?: string; index: number; durationInSeconds: number; isPartial: boolean; originalDuration: number; isMovable: boolean; videoId?: string };
 const SECONDS_IN_DAY = 24 * 60 * 60;
 
 const getItemsByDay = (items: SchedulerProps["items"]) => {
@@ -64,9 +71,10 @@ const getItemsByDay = (items: SchedulerProps["items"]) => {
   return itemsByDay;
 };
 
-export default function Scheduler({ items: initialItems }: SchedulerProps) {
+export default function Scheduler({ items: initialItems, stationId }: SchedulerProps) {
   const [items, setItems] = useState(initialItems);
   const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const router = useRouter();
   const hourHeight = 100;
   const dayWidth = 200;
 
@@ -83,14 +91,44 @@ export default function Scheduler({ items: initialItems }: SchedulerProps) {
     setItems(allDaysNewOrder);
   };
 
+  const updateSchedule = api.schedule.updateVideoAtTimeForStation.useMutation();
+  const saveSchedule = () => {
+    updateSchedule.mutate(
+      { stationId, items: items.map((item) => ({ id: item.id, videoId: item.videoId, durationInSeconds: item.durationInSeconds })) },
+      {
+        onSuccess: () => {
+          router.refresh();
+        },
+      }
+    );
+  };
+
   return (
-    <div className="flex">
-      <div className="flex-1 flex relative" style={{ minWidth: `${days.length * dayWidth}px` }}>
+    <div className="flex flex-col gap-10">
+      <Card>
+        <CardHeader>
+          <CardTitle>Schedule</CardTitle>
+          <CardDescription>Organize your station's video into a schedule</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex gap-2">
+            <Button onClick={saveSchedule} disabled={updateSchedule.isPending}>
+              {updateSchedule.isPending ? <Loader2 className="animate-spin" /> : "Save"}
+            </Button>
+            <Button variant="secondary" onClick={() => setItems(initialItems)} disabled={updateSchedule.isPending}>
+              Cancel
+            </Button>
+          </div>
+          {updateSchedule.isError && <p className="text-sm text-destructive mt-2">Error saving schedule. Please try again.</p>}
+          {updateSchedule.isSuccess && <p className="text-sm text-secondary mt-2">Schedule saved successfully!</p>}
+        </CardContent>
+      </Card>
+      <Card className="flex-1 flex relative mx-auto w-full" style={{ maxWidth: `${7 * dayWidth}px` }}>
         <TimeColumn hourHeight={hourHeight} />
         {days.map((day, dayIndex) => (
           <DayColumn key={day} day={day} dayWidth={dayWidth} hourHeight={hourHeight} items={itemsByDay[dayIndex] ?? []} onUpdate={(newOrder) => handleReorder(newOrder, dayIndex)} />
         ))}
-      </div>
+      </Card>
     </div>
   );
 }
