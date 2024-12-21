@@ -20,7 +20,6 @@ export default function CreateStation({ tagOptions }: { tagOptions: Tag[] }) {
   const createStation = api.stations.createStation.useMutation();
 
   const onSubmit = async (data: EditStationForm) => {
-    console.log(data);
     const station = await createStation.mutateAsync({
       name: data.name,
       description: data.description,

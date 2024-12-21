@@ -64,3 +64,41 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ScheduleX */
+.sx__week-grid__date-number {
+  display: none !important;
+}
+
+.sx__calendar-header {
+  display: none !important;
+}
+
+:root {
+  --sx-color-primary: hsl(var(--primary));
+  --sx-color-on-primary: hsl(var(--primary-foreground));
+  --sx-color-primary-container: hsl(var(--primary));
+  --sx-color-on-primary-container: hsl(var(--primary-foreground));
+  --sx-color-secondary: hsl(var(--secondary));
+  --sx-color-on-secondary: hsl(var(--secondary-foreground));
+  --sx-color-secondary-container: hsl(var(--secondary));
+  --sx-color-on-secondary-container: var(--secondary-foreground);
+  --sx-color-tertiary: var(--accent);
+  --sx-color-on-tertiary: var(--accent-foreground);
+  --sx-color-tertiary-container: var(--accent);
+  --sx-color-on-tertiary-container: var(--accent-foreground);
+  --sx-color-surface: var(--background);
+  --sx-color-surface-dim: var(--background);
+  --sx-color-surface-bright: var(--foreground);
+  --sx-color-on-surface: var(--foreground);
+  --sx-color-surface-container: var(--card);
+  --sx-color-surface-container-low: var(--muted);
+  --sx-color-surface-container-high: var(--popover);
+  --sx-color-background: var(--background);
+  --sx-color-on-background: var(--foreground);
+  --sx-color-outline: var(--border);
+  --sx-color-outline-variant: var(--input);
+  --sx-color-shadow: var(--background);
+  --sx-color-surface-tint: var(--ring);
+  --sx-internal-color-text: var(--foreground);
+}

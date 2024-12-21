@@ -98,9 +98,8 @@ model ScheduleItem {
   id         String   @id @default(cuid())
   stationId  String
   videoId    String
+  dayOfWeek  Int
   startTime  DateTime
-  endTime    DateTime
-  repeatDays Int      @default(0) // Bitmap for days of week
   station    Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
   video      Video    @relation(fields: [videoId], references: [id])
 }
