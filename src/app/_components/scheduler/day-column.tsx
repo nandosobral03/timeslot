@@ -1,7 +1,7 @@
 "use client";
 
 import { Reorder } from "framer-motion";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import AddVideoButton from "./add-video";
 import ScheduleItem from "./schedule-item";
 import type { SchedulerItem } from "./scheduler";
@@ -11,6 +11,10 @@ import { v4 as uuidv4 } from "uuid";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { formatTime } from "@/lib/utils";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 const getGradientColor = (id: string) => {
   const colors = ["from-blue-500 to-cyan-500", "from-purple-500 to-pink-500", "from-green-500 to-emerald-500", "from-yellow-500 to-orange-500", "from-red-500 to-rose-500", "from-indigo-500 to-violet-500", "from-teal-500 to-green-500"];
@@ -23,8 +27,25 @@ type EmptySpace = { duration: number };
 
 const DayColumn = ({ day, dayWidth, hourHeight, items, onUpdate }: { day: string; dayWidth: number; hourHeight: number; items: SchedulerItem[]; onUpdate: (newOrder: SchedulerItem[]) => void }) => {
   const pixelsPerSecond = hourHeight / 3600;
-
   const [clickedIndex, setClickedIndex] = useState<number | null>(null);
+  const [currentTimePosition, setCurrentTimePosition] = useState(0);
+  const [isToday, setIsToday] = useState(false);
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = dayjs().utc();
+      const currentDay = now.format("dddd");
+      setIsToday(currentDay === day);
+
+      // Calculate seconds since midnight UTC
+      const secondsSinceMidnight = now.hour() * 3600 + now.minute() * 60 + now.second();
+      setCurrentTimePosition(secondsSinceMidnight * pixelsPerSecond);
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, [day, pixelsPerSecond]);
 
   const onVideoSelected = (video: Video | EmptySpace) => {
     if (clickedIndex === null) return;
@@ -56,6 +77,15 @@ const DayColumn = ({ day, dayWidth, hourHeight, items, onUpdate }: { day: string
     <div className="border-r border-border" style={{ width: `${dayWidth}px`, maxWidth: `${dayWidth}px` }}>
       <div className="text-center p-2 font-medium border-b border-border">{day}</div>
       <div style={{ height: `${24 * hourHeight}px`, position: "relative", overflowY: "hidden" }}>
+        {isToday && (
+          <div
+            className="absolute w-full border-t border-red-500 z-10"
+            style={{
+              top: `${currentTimePosition}px`,
+              borderWidth: "1px",
+            }}
+          />
+        )}
         {items.length === 0 && day === "Sunday" ? (
           <div className="flex w-full">
             <Button variant="default" className=" aspect-square p-2 my-2 mx-auto rounded-full" onClick={() => setClickedIndex(0)}>

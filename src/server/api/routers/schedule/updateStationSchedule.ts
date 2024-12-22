@@ -26,6 +26,17 @@ export const updateVideoAtTimeForStation = protectedProcedure
 
     let secondsSoFar = 0;
 
+    const station = await ctx.db.station.findUnique({
+      where: {
+        id: input.stationId,
+        userId: ctx.user.id,
+      },
+    });
+
+    if (!station) {
+      throw new Error("Station not found");
+    }
+
     const createData: Prisma.ScheduleItemCreateManyInput[] = [];
 
     for (const item of items) {
@@ -40,6 +51,8 @@ export const updateVideoAtTimeForStation = protectedProcedure
         videoId: item.videoId ?? undefined,
         duration: item.durationInSeconds,
       });
+
+      secondsSoFar += item.durationInSeconds;
     }
 
     await ctx.db.scheduleItem.deleteMany({

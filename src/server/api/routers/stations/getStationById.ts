@@ -12,6 +12,11 @@ export const getStationById = protectedProcedure.input(z.object({ id: z.string()
           video: true,
         },
       },
+      scheduleItems: {
+        include: {
+          video: true,
+        },
+      },
       tags: true,
     },
   });
