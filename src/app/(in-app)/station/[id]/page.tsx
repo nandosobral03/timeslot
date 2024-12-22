@@ -1,10 +1,12 @@
 import { notFound } from "next/navigation";
 import { api } from "@/trpc/server";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import VideoPreview from "./video-preview";
+import Link from "next/link";
 
 dayjs.extend(utc);
 
@@ -47,8 +49,15 @@ export default async function StationPage({ params }: StationPageProps) {
     <div className="container mx-auto p-4">
       <Card>
         <CardHeader>
-          <CardTitle>{station.name}</CardTitle>
-          <CardDescription>{station.description}</CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>{station.name}</CardTitle>
+              <CardDescription>{station.description}</CardDescription>
+            </div>
+            <Button size="lg" asChild>
+              <Link href={`/station/${params.id}/watch`}>Watch Now</Link>
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {station.thumbnail && <Image src={station.thumbnail} alt={station.name} width={300} height={169} className="rounded-md bg-white" />}
