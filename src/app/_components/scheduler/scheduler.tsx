@@ -1,13 +1,17 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import TimeColumn from "./time-column";
-import DayColumn from "./day-column";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { SelectSeparator } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { api } from "@/trpc/react";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
+import { toast } from "sonner"; // Import toast from sonner
+import DayColumn from "./day-column";
+import OrderedView from "./ordered-view";
+import TimeColumn from "./time-column";
 
 type SchedulerProps = {
   items: {
@@ -71,24 +75,30 @@ const getItemsByDay = (items: SchedulerProps["items"]) => {
   return itemsByDay;
 };
 
+const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const HOUR_HEIGHT = 100;
+const DAY_WIDTH = 150;
+
 export default function Scheduler({ items: initialItems, stationId }: SchedulerProps) {
   const [items, setItems] = useState(initialItems);
-  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const router = useRouter();
-  const hourHeight = 100;
-  const dayWidth = 200;
 
+  const [isScheduleView, setIsScheduleView] = useState(true);
   const itemsByDay = useMemo(() => getItemsByDay(items), [items]);
 
   const handleReorder = (newOrder: SchedulerItem[], dayIndex: number) => {
     const updatedItemsByDay = [...itemsByDay];
     updatedItemsByDay[dayIndex] = newOrder;
 
-    const allDaysNewOrder = updatedItemsByDay
+    const allDAYSNewOrder = updatedItemsByDay
       .flat()
       .map((item) => ({ ...item, durationInSeconds: item.isPartial ? item.originalDuration : item.durationInSeconds }))
       .filter((item) => item.isMovable);
-    setItems(allDaysNewOrder);
+    setItems(allDAYSNewOrder);
+  };
+
+  const handleReorderOrderedView = (newOrder: SchedulerItem[]) => {
+    setItems(newOrder.map((item) => ({ ...item, durationInSeconds: item.isPartial ? item.originalDuration : item.durationInSeconds })));
   };
 
   const updateSchedule = api.schedule.updateVideoAtTimeForStation.useMutation();
@@ -97,7 +107,11 @@ export default function Scheduler({ items: initialItems, stationId }: SchedulerP
       { stationId, items: items.map((item) => ({ id: item.id, videoId: item.videoId, durationInSeconds: item.durationInSeconds })) },
       {
         onSuccess: () => {
+          toast.success("Schedule updated successfully!");
           router.refresh();
+        },
+        onError: () => {
+          toast.error("Failed to update schedule.");
         },
       }
     );
@@ -108,27 +122,54 @@ export default function Scheduler({ items: initialItems, stationId }: SchedulerP
       <Card>
         <CardHeader>
           <CardTitle>Schedule</CardTitle>
-          <CardDescription>Organize your station's video into a schedule</CardDescription>
+          <CardDescription>
+            Organize your station's video into a schedule that everyone can enjoy at the same time.
+            <br /> Schedules are weekly guides for your station based on UTC time. You can see what that time would correspond to in your local time zone by following the red line on the schedule.
+            <br />
+            <SelectSeparator />
+            <div className="text-xs">
+              <span className="font-semibold text-secondary">Pro Tip:</span> Shorter videos might be hard to handle in the schedule view because of their height, so we recommend using the ordered view.
+            </div>
+          </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-row-reverse gap-2 justify-between">
           <div className="flex gap-2">
-            <Button onClick={saveSchedule} disabled={updateSchedule.isPending}>
-              {updateSchedule.isPending ? <Loader2 className="animate-spin" /> : "Save"}
-            </Button>
-            <Button variant="secondary" onClick={() => setItems(initialItems)} disabled={updateSchedule.isPending}>
-              Cancel
-            </Button>
+            <div className="flex items-center gap-2">
+              <Switch id="viewSwitch" checked={isScheduleView} onCheckedChange={(checked) => setIsScheduleView(checked)} />
+              <span className="text-sm" style={{ minWidth: "100px" }}>
+                {isScheduleView ? "Schedule View" : "Ordered View"}
+              </span>
+            </div>
           </div>
-          {updateSchedule.isError && <p className="text-sm text-destructive mt-2">Error saving schedule. Please try again.</p>}
-          {updateSchedule.isSuccess && <p className="text-sm text-secondary mt-2">Schedule saved successfully!</p>}
+          <div className="flex flex-col gap-2">
+            <div className="flex gap-2">
+              <Button onClick={saveSchedule} disabled={updateSchedule.isPending}>
+                {updateSchedule.isPending ? <Loader2 className="animate-spin" /> : "Save"}
+              </Button>
+              <Button variant="secondary" onClick={() => setItems(initialItems)} disabled={updateSchedule.isPending}>
+                Cancel
+              </Button>
+            </div>
+          </div>
         </CardContent>
       </Card>
-      <Card className="flex-1 flex relative mx-auto w-full" style={{ maxWidth: `${7 * dayWidth}px` }}>
-        <TimeColumn hourHeight={hourHeight} />
-        {days.map((day, dayIndex) => (
-          <DayColumn key={day} day={day} dayWidth={dayWidth} hourHeight={hourHeight} items={itemsByDay[dayIndex] ?? []} onUpdate={(newOrder) => handleReorder(newOrder, dayIndex)} />
-        ))}
-      </Card>
+      {isScheduleView ? (
+        <Card className="flex-1 flex relative mx-auto w-full" style={{ maxWidth: `${7 * DAY_WIDTH}px` }}>
+          <TimeColumn hourHeight={HOUR_HEIGHT} />
+          {DAYS.map((day, dayIndex) => (
+            <DayColumn key={day} day={day} dayWidth={DAY_WIDTH} hourHeight={HOUR_HEIGHT} items={itemsByDay[dayIndex] ?? []} onUpdate={(newOrder) => handleReorder(newOrder, dayIndex)} />
+          ))}
+        </Card>
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>Ordered View</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <OrderedView items={itemsByDay} onReorder={handleReorderOrderedView} />
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
