@@ -4,6 +4,7 @@ import * as stationProcedures from "@/server/api/routers/stations";
 import * as tagProcedures from "@/server/api/routers/tags";
 import * as videoProcedures from "@/server/api/routers/videos";
 import * as scheduleProcedures from "@/server/api/routers/schedule";
+import * as chatProcedures from "@/server/api/routers/chat";
 /**
  * This is the primary router for your server.
  *
@@ -15,6 +16,7 @@ export const appRouter = createTRPCRouter({
   tags: createTRPCRouter(tagProcedures),
   videos: createTRPCRouter(videoProcedures),
   schedule: createTRPCRouter(scheduleProcedures),
+  chat: createTRPCRouter(chatProcedures),
 });
 
 // export type definition of API

@@ -33,7 +33,7 @@ export const login = publicProcedure
 
     const token = generateSessionToken();
     const session = await createSession(token, user.id);
-    setSessionTokenCookie(token, session.expiresAt);
+    await setSessionTokenCookie(token, session.expiresAt);
 
     return {
       user,

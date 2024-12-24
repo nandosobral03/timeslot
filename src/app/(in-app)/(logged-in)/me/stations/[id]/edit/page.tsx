@@ -1,7 +1,7 @@
-import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { api } from "@/trpc/server";
 import EditStation from "./edit-station";
+import PageWrapper from "@/app/_components/common/page-wrapper";
 
 interface EditStationPageProps {
   params: Promise<{
@@ -20,10 +20,8 @@ export default async function EditStationPage({ params }: EditStationPageProps) 
   }
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <div className="container mx-auto p-4">
-        <EditStation station={station} tagOptions={tags} />
-      </div>
-    </Suspense>
+    <PageWrapper title="Edit Station" showBackArrow>
+      <EditStation station={station} tagOptions={tags} />
+    </PageWrapper>
   );
 }

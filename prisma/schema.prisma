@@ -29,20 +29,22 @@ model User {
   sessions        Session[]
   credentialsUser CredentialsUser?
   googleUser      GoogleUser?
+
+  chatMessages ChatMessage[]
 }
 
 model CredentialsUser {
-  userId   String @unique @id @default(cuid())
+  userId   String @id @unique @default(cuid())
   password String // Hashed
 
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model GoogleUser {
-  userId   String @unique @id @default(cuid())
+  userId   String @id @unique @default(cuid())
   googleId String @unique
 
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Session {
@@ -65,10 +67,11 @@ model Station {
   isRandomized  Boolean        @default(false)
   tags          Tag[]
   scheduleItems ScheduleItem[]
-  videos VideoStation[]
+  videos        VideoStation[]
   comments      Comment[]
   followers     User[]         @relation("station-followers")
   adClip        String?        @default("default-ad.mp4")
+  chatMessages  ChatMessage[]
 }
 
 model Video {
@@ -78,7 +81,7 @@ model Video {
   duration       Int
   category       String?
   youtubeChannel String
-  stations  VideoStation[]
+  stations       VideoStation[]
   scheduleItems  ScheduleItem[]
 }
 
@@ -95,14 +98,14 @@ model VideoStation {
 }
 
 model ScheduleItem {
-  id         String   @id @default(cuid())
-  stationId  String
-  videoId    String?
-  dayOfWeek  Int
-  startTime  DateTime
-  station    Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
-  video      Video?   @relation(fields: [videoId], references: [id])
-  duration   Int
+  id        String   @id @default(cuid())
+  stationId String
+  videoId   String?
+  dayOfWeek Int
+  startTime DateTime
+  station   Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  video     Video?   @relation(fields: [videoId], references: [id])
+  duration  Int
 }
 
 model Tag {
@@ -128,6 +131,16 @@ model Message {
   stationId String
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  content   String
+  userId    String
+  stationId String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  station   Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
 }
 
 model Image {

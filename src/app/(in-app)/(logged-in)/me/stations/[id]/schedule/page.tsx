@@ -5,6 +5,7 @@ import utc from "dayjs/plugin/utc";
 import isBetween from "dayjs/plugin/isBetween";
 import Scheduler from "../../../../../../_components/scheduler/scheduler";
 import { formatTime } from "@/lib/utils";
+import PageWrapper from "@/app/_components/common/page-wrapper";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -40,9 +41,9 @@ async function CalendarApp({ params }: CalendarAppProps) {
     .sort((a, b) => a.index - b.index);
 
   return (
-    <div className="container mx-auto p-4">
+    <PageWrapper title="Schedule" showBackArrow>
       <Scheduler items={itemsForScheduler} stationId={id} />
-    </div>
+    </PageWrapper>
   );
 }
 

@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import duration from "dayjs/plugin/duration";
 import type { Prisma } from "@prisma/client";
 import Intermission from "./intermission";
 import UpcomingVideoNotice from "./upcoming-video-notice";
+import SleepControl from "@/app/_components/common/sleep-control";
 
 dayjs.extend(utc);
 dayjs.extend(duration);
@@ -41,6 +42,7 @@ const getCurrentVideoIndex = (schedule: Prisma.ScheduleItemGetPayload<{ include:
 
 export default function WatchPage({ schedule }: WatchPageProps) {
   const frameRef = useRef<HTMLIFrameElement>(null);
+  const [showVideo, setShowVideo] = useState(true);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(getCurrentVideoIndex(schedule, dayjs().utc()));
 
   const upcomingSchedule = useMemo(() => {
@@ -60,7 +62,14 @@ export default function WatchPage({ schedule }: WatchPageProps) {
     return () => clearInterval(interval);
   }, [schedule, currentVideoIndex]);
 
-  console.log(upcomingSchedule);
+  const onSleep = useCallback(() => {
+    setShowVideo(false);
+  }, []);
+
+  const onWake = useCallback(() => {
+    setShowVideo(true);
+  }, []);
+
   if (!currentVideo) {
     return <Intermission />;
   }
@@ -72,9 +81,9 @@ export default function WatchPage({ schedule }: WatchPageProps) {
 
   return (
     <div className="w-full h-full relative">
-      <iframe ref={frameRef} src={currentVideoUrl} allow="autoplay; encrypted-media; fullscreen" allowFullScreen title="Station stream" className="w-full h-full" suppressHydrationWarning />
-
+      <SleepControl onSleep={onSleep} onWake={onWake} />
       <UpcomingVideoNotice upcomingVideo={upcomingSchedule[1] ?? null} />
+      {showVideo && <iframe ref={frameRef} src={currentVideoUrl} allow="autoplay; encrypted-media; fullscreen" allowFullScreen title="Station stream" className="w-full h-full" suppressHydrationWarning />}
     </div>
   );
 }

@@ -57,7 +57,7 @@ const OrderedView = ({ items, onReorder }: OrderedViewProps) => {
 
   return (
     <>
-      <Reorder.Group axis="y" values={flatItems} onReorder={onReorder} className="flex flex-col items-center">
+      <Reorder.Group axis="y" values={flatItems} onReorder={onReorder} className="flex flex-col items-center gap-2">
         {flatItems.length === 0 ? (
           <Button variant="default" className="aspect-square p-2 my-2 rounded-full" onClick={() => setClickedIndex(0)}>
             <Plus className="w-4 h-4" />

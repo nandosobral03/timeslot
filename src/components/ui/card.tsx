@@ -12,7 +12,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(({ className, variant =
     secondary: "border-secondary/50",
   };
 
-  return <div ref={ref} className={cn("rounded-lg border-2 bg-card text-card-foreground shadow-lg transition-all hover:shadow-lg", variantStyles[variant], className)} {...props} />;
+  return <div ref={ref} className={cn("rounded-lg border-2 bg-background-light text-card-foreground shadow-lg transition-all hover:shadow-lg", variantStyles[variant], className)} {...props} />;
 });
 Card.displayName = "Card";
 

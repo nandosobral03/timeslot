@@ -80,7 +80,7 @@ export default function ImageUploaderButton({ onUpload }: { onUpload: (url: stri
   };
 
   return (
-    <Button variant="outline" disabled={isUploading} onClick={() => document.getElementById("image-upload")?.click()} type="button">
+    <Button variant="outline" disabled={isUploading} onClick={() => document.getElementById("image-upload")?.click()} type="button" className="bg-background-light">
       {isUploading ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />

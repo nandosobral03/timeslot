@@ -128,7 +128,7 @@ export default function Scheduler({ items: initialItems, stationId }: SchedulerP
             <br />
             <SelectSeparator />
             <div className="text-xs">
-              <span className="font-semibold text-secondary">Pro Tip:</span> Shorter videos might be hard to handle in the schedule view because of their height, so we recommend using the ordered view.
+              <span className="font-semibold text-primary">Pro Tip:</span> Shorter videos might be hard to handle in the schedule view because of their height, so we recommend using the ordered view.
             </div>
           </CardDescription>
         </CardHeader>

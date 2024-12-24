@@ -3,6 +3,7 @@
 import type { Tag } from "@prisma/client";
 import EditStationPage, { type EditStationForm } from "../components/edit-station";
 import { api } from "@/trpc/react";
+import PageWrapper from "@/app/_components/common/page-wrapper";
 
 export default function CreateStation({ tagOptions }: { tagOptions: Tag[] }) {
   const emptyStation: Parameters<typeof EditStationPage>[0]["station"] = {
@@ -30,5 +31,9 @@ export default function CreateStation({ tagOptions }: { tagOptions: Tag[] }) {
     window.location.href = `/me/station/${station.id}`;
   };
 
-  return <EditStationPage station={emptyStation} onSubmit={onSubmit} isLoading={createStation.isPending} tagOptions={tagOptions} />;
+  return (
+    <PageWrapper title="Create Station" showBackArrow>
+      <EditStationPage station={emptyStation} onSubmit={onSubmit} isLoading={createStation.isPending} tagOptions={tagOptions} />
+    </PageWrapper>
+  );
 }
