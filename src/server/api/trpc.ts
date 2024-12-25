@@ -82,7 +82,10 @@ export const createTRPCRouter = t.router;
  * guarantee that a user querying is authorized, but you can still access user session data if they
  * are logged in.
  */
-export const publicProcedure = t.procedure;
+export const publicProcedure = t.procedure.use(async ({ next, ctx }) => {
+  const session = await getCurrentSession();
+  return next({ ctx: { ...ctx, ...session } });
+});
 
 export const protectedProcedure = publicProcedure.use(async ({ next, ctx }) => {
   const session = await getCurrentSession();

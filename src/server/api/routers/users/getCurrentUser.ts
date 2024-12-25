@@ -1,6 +1,8 @@
-import { protectedProcedure } from "@/server/api/trpc";
+import { publicProcedure } from "@/server/api/trpc";
 
-export const getCurrentUser = protectedProcedure.query(async ({ ctx }) => {
+export const getCurrentUser = publicProcedure.query(async ({ ctx }) => {
+  if (!ctx.user) return null;
+
   const user = await ctx.db.user.findUnique({
     where: {
       id: ctx.user.id,
