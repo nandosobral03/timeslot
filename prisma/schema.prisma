@@ -69,9 +69,11 @@ model Station {
   scheduleItems ScheduleItem[]
   videos        VideoStation[]
   comments      Comment[]
-  followers     User[]         @relation("station-followers")
   adClip        String?        @default("default-ad.mp4")
   chatMessages  ChatMessage[]
+
+  followers     User[]         @relation("station-followers")
+  followersCount Int           @default(0)
 }
 
 model Video {
@@ -81,6 +83,7 @@ model Video {
   duration       Int
   category       String?
   youtubeChannel String
+  youtubeChannelId String
   stations       VideoStation[]
   scheduleItems  ScheduleItem[]
 }

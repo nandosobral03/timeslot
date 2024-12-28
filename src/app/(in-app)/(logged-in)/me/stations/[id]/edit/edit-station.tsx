@@ -37,7 +37,7 @@ export default function EditStation({ station, tagOptions }: { station: NonNulla
       tags: data.tags.map((tag) => tag.id),
       videos: data.videos.map((video) => video.id),
     });
-    window.location.href = `/me/station/${updatedStation.id}`;
+    window.location.href = `/me/stations/${updatedStation.id}`;
   };
 
   return <EditStationPage station={initialFormState} onSubmit={onSubmit} isLoading={isPending} tagOptions={tagOptions} />;

@@ -48,12 +48,12 @@ export default async function StationDetails({ station, showButtons = [], showCu
           <div className="flex flex-col gap-2">
             {showButtons.includes("edit") && (
               <Button variant="default">
-                <Link href={`/me/station/${station.id}/edit`}>Edit</Link>
+                <Link href={`/me/stations/${station.id}/edit`}>Edit</Link>
               </Button>
             )}
             {showButtons.includes("schedule") && (
               <Button variant="secondary">
-                <Link href={`/me/station/${station.id}/schedule`}>Schedule</Link>
+                <Link href={`/me/stations/${station.id}/schedule`}>Schedule</Link>
               </Button>
             )}
             {showButtons.includes("watch") && (

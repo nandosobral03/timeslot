@@ -25,7 +25,7 @@ export const cacheVideoInfo = async (videoId: string) => {
       message: "Video not found",
     };
   }
-  if (!video.snippet?.title || !video.snippet?.thumbnails?.high?.url || !video.contentDetails?.duration || !video.snippet?.categoryId || !video.snippet?.channelTitle) {
+  if (!video.snippet?.title || !video.snippet?.thumbnails?.high?.url || !video.contentDetails?.duration || !video.snippet?.categoryId || !video.snippet?.channelTitle || !video.snippet?.channelId) {
     throw {
       status: 500,
       message: "Missing required video information",
@@ -38,6 +38,7 @@ export const cacheVideoInfo = async (videoId: string) => {
     duration: durationToSeconds(video.contentDetails.duration),
     category: getCategoryName(Number(video.snippet.categoryId)),
     youtubeChannel: video.snippet.channelTitle,
+    youtubeChannelId: video.snippet.channelId,
   };
   try {
     const video = await db.video.create({ data: insert });

@@ -28,7 +28,7 @@ export default function CreateStation({ tagOptions }: { tagOptions: Tag[] }) {
       tags: data.tags.map((tag) => tag.id),
       videos: data.videos.map((video) => video.id),
     });
-    window.location.href = `/me/station/${station.id}`;
+    window.location.href = `/me/stations/${station.id}`;
   };
 
   return (

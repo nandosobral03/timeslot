@@ -5,26 +5,30 @@ import { Home, Radio, User, Bookmark, LogIn, LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const routes: { icon: React.ReactNode; name: string; path: string }[] = [
+const routes: { icon: React.ReactNode; name: string; path: string; needsAuth: boolean }[] = [
   {
     icon: <Home className="w-5 h-5" />,
     name: "Home",
     path: "/",
+    needsAuth: false,
   },
   {
     icon: <Radio className="w-5 h-5" />,
     name: "Stations",
     path: "/stations",
+    needsAuth: false,
   },
   {
     icon: <Bookmark className="w-5 h-5" />,
     name: "Favorites",
     path: "/favorites",
+    needsAuth: true,
   },
   {
     icon: <User className="w-5 h-5" />,
     name: "Profile",
     path: "/me",
+    needsAuth: true,
   },
 ];
 
@@ -39,7 +43,7 @@ export default function Nav() {
           <Link
             key={route.path}
             href={route.path}
-            className={`flex flex-col items-center justify-center p-2 w-full transition-colors hover:bg-primary hover:text-primary-foreground ${route.path === "/" ? pathname === "/" : pathname?.startsWith(route.path) ? "bg-primary text-primary-foreground" : ""} rounded-lg aspect-square`}
+            className={`flex flex-col items-center justify-center p-2 w-full transition-colors hover:bg-primary hover:text-primary-foreground ${route.path === "/" ? pathname === "/" : pathname?.startsWith(route.path) ? "bg-primary text-primary-foreground" : ""} rounded-lg aspect-square ${route.needsAuth && !isLoggedIn ? "hidden" : ""}`}
           >
             {route.icon}
           </Link>
