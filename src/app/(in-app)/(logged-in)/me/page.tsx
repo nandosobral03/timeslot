@@ -12,10 +12,10 @@ export default async function MePage() {
   if (!user) return null;
 
   return (
-    <PageWrapper>
+    <PageWrapper title="Profile">
       <Card>
         <CardHeader>
-          <CardTitle>My Profile</CardTitle>
+          <CardTitle>About me</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">

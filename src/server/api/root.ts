@@ -5,6 +5,7 @@ import * as tagProcedures from "@/server/api/routers/tags";
 import * as videoProcedures from "@/server/api/routers/videos";
 import * as scheduleProcedures from "@/server/api/routers/schedule";
 import * as chatProcedures from "@/server/api/routers/chat";
+import * as youtubeProcedures from "@/server/api/routers/youtube";
 /**
  * This is the primary router for your server.
  *
@@ -17,6 +18,7 @@ export const appRouter = createTRPCRouter({
   videos: createTRPCRouter(videoProcedures),
   schedule: createTRPCRouter(scheduleProcedures),
   chat: createTRPCRouter(chatProcedures),
+  youtube: createTRPCRouter(youtubeProcedures),
 });
 
 // export type definition of API

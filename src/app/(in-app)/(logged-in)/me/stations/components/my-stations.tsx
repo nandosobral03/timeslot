@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import type { Station } from "@prisma/client";
-import Image from "next/image";
 import Link from "next/link";
+import type { RouterOutputs } from "@/trpc/react";
+import StationCard from "@/app/_components/station/station-card";
 
-export default function MyStations({ stations }: { stations: Station[] }) {
+export default function MyStations({ stations }: { stations: RouterOutputs["stations"]["getMyStations"] }) {
   return (
     <Card className="space-y-6">
       <CardHeader>
@@ -19,19 +19,19 @@ export default function MyStations({ stations }: { stations: Station[] }) {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {stations?.map((station) => (
-            <Link href={`/me/stations/${station.id}`} key={station.id}>
-              <div className="hover:shadow-lg transition-shadow rounded-lg border p-4">
-                <div className="pb-2">
-                  <h3 className="text-lg font-semibold">{station.name}</h3>
-                </div>
-                <div>
-                  <Image src={station.thumbnail} alt={station.name} width={300} height={169} className="rounded-md w-full object-cover aspect-video" />
-                  <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{station.description}</p>
-                </div>
-              </div>
-            </Link>
+            <StationCard
+              key={station.id}
+              id={station.id}
+              name={station.name}
+              thumbnail={station.thumbnail}
+              tags={station.tags}
+              followersCount={station._count?.followers ?? 0}
+              scheduleItems={station.scheduleItems ?? []}
+              isPublic={station.isPublic}
+              shouldShowIfIsPublic
+            />
           ))}
         </div>
       </CardContent>
