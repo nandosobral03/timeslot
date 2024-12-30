@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import useAuthGuard from "@/app/hooks/useAuthGuard";
 import { useState } from "react";
 import { SelectSeparator } from "@/components/ui/select";
+import Pill from "@/app/_components/common/pill";
 dayjs.extend(utc);
 
 interface StationDetailsProps {
@@ -104,9 +105,9 @@ export default function StationDetails({ station, showButtons = [], showCurrentS
             {station.thumbnail && <Image src={station.thumbnail} alt={station.name} width={300} height={169} className="rounded-md bg-white" />}
             <div className="flex flex-wrap gap-2">
               {station.tags?.map((tag) => (
-                <span key={tag.id} className="bg-secondary text-secondary-foreground px-3 py-1 rounded-md text-sm">
+                <Pill key={tag.id} variant="secondary">
                   {tag.name}
-                </span>
+                </Pill>
               ))}
             </div>
 
@@ -121,9 +122,9 @@ export default function StationDetails({ station, showButtons = [], showCurrentS
             {station.thumbnail && <Image src={station.thumbnail} alt={station.name} width={300} height={169} className="rounded-md" />}
             <div className="flex flex-wrap gap-2">
               {station.tags?.map((tag) => (
-                <span key={tag.id} className="bg-secondary text-secondary-foreground px-3 py-1 rounded-md text-sm">
+                <Pill key={tag.id} variant="secondary">
                   {tag.name}
-                </span>
+                </Pill>
               ))}
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

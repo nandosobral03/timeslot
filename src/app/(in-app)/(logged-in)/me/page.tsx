@@ -26,8 +26,8 @@ export default async function MePage() {
             </div>
           </div>
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
-            {user.type === "credentials" && <UpdatePasswordButton />}
             <UpdateDisplayNameButton />
+            {user.type === "credentials" && <UpdatePasswordButton />}
           </div>
         </CardContent>
       </Card>

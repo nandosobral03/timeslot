@@ -37,7 +37,7 @@ export default function Nav() {
   const { isLoggedIn, isLoading, logout, login } = useSession();
 
   return (
-    <nav className="h-full max-w-16 w-16 bg-background-light rounded-lg text-foreground flex flex-col items-center justify-between px-2 py-2 gap-2">
+    <nav className="h-full bg-background-light rounded-lg text-foreground flex flex-col items-center justify-between p-3 gap-2">
       <div className="flex flex-col items-center gap-2">
         {routes.map((route) => (
           <Link

@@ -50,7 +50,7 @@ export default function UpdatePasswordButton() {
 
   return (
     <>
-      <Button variant="outline" onClick={() => setIsPasswordModalOpen(true)}>
+      <Button variant="secondary" onClick={() => setIsPasswordModalOpen(true)}>
         Update Password
       </Button>
 
