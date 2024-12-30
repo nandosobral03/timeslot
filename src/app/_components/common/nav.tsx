@@ -43,7 +43,7 @@ export default function Nav() {
           <Link
             key={route.path}
             href={route.path}
-            className={`flex flex-col items-center justify-center p-2 w-full transition-colors hover:bg-primary hover:text-primary-foreground ${route.path === "/" ? pathname === "/" : pathname?.startsWith(route.path) ? "bg-primary text-primary-foreground" : ""} rounded-lg aspect-square ${route.needsAuth && !isLoggedIn ? "hidden" : ""}`}
+            className={`flex flex-col items-center justify-center p-2 w-full transition-colors hover:bg-primary hover:text-primary-foreground ${pathname === route.path ? "bg-primary text-primary-foreground" : ""} rounded-lg aspect-square ${route.needsAuth && !isLoggedIn ? "hidden" : ""}`}
           >
             {route.icon}
           </Link>

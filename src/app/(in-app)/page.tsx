@@ -9,10 +9,12 @@ export default async function Home() {
 
   return (
     <PageWrapper>
-      <h1 className="text-4xl font-bold text-center mb-8">
-        Welcome to <span className="text-primary">Timeslot</span>
-      </h1>
-      <p className="text-start mb-8">Welcome to Timeslot, your gateway to curated YouTube broadcasts! Create or tune in to any station broadcasting your favorite YouTube videos and channels at any time, all the time.</p>
+      <Card>
+        <CardContent>
+          <CardTitle>Welcome to Timeslot</CardTitle>
+          <CardDescription>Your gateway to curated YouTube broadcasts! Create or tune in to any station broadcasting your favorite YouTube videos and channels at any time, all the time.</CardDescription>
+        </CardContent>
+      </Card>
 
       <Card className="mb-6">
         <CardHeader>
