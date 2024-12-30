@@ -10,32 +10,56 @@ import YouTubeSearch from "@/app/_components/common/youtube-search";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import PageWrapper from "@/app/_components/common/page-wrapper";
 import StationCard from "@/app/_components/station/station-card";
+import Pill from "@/app/_components/common/pill";
+
 export default function BrowseStationsPage() {
   const [search, setSearch] = useState("");
   const [youtubeSearch, setYoutubeSearch] = useState<{ id: string; type: "video" | "channel"; title: string; thumbnail: string } | null>(null);
+  const [selectedTag, setSelectedTag] = useState<string>("");
 
   const [sortBy, setSortBy] = useState<"createdAt" | "followersCount">("createdAt");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  const [page, setPage] = useState(1);
   const pageSize = 10;
 
+  const [searchParams, setSearchParams] = useState({
+    search: "",
+    youtubeSearch: null as typeof youtubeSearch,
+    selectedTag: "",
+    sortBy: "createdAt" as "createdAt" | "followersCount",
+    sortOrder: "desc" as "asc" | "desc",
+    page: 1,
+  });
+
+  const { data: tags } = api.tags.list.useQuery();
+
   const { data: stations, isLoading } = api.stations.listStations.useQuery({
-    page,
+    page: searchParams.page,
     pageSize,
-    search,
-    videoId: youtubeSearch?.type === "video" ? youtubeSearch.id : undefined,
-    channelId: youtubeSearch?.type === "channel" ? youtubeSearch.id : undefined,
-    sortBy,
-    sortOrder,
+    search: searchParams.search,
+    videoId: searchParams.youtubeSearch?.type === "video" ? searchParams.youtubeSearch.id : undefined,
+    channelId: searchParams.youtubeSearch?.type === "channel" ? searchParams.youtubeSearch.id : undefined,
+    sortBy: searchParams.sortBy,
+    sortOrder: searchParams.sortOrder,
+    tags: searchParams.selectedTag ? [searchParams.selectedTag] : [],
   });
 
   const toggleSortOrder = () => {
     setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
-    setPage(1);
   };
 
-  const totalPages = Math.ceil((stations?.total ?? 0) / pageSize);
-  const hasNextPage = page < totalPages;
+  const handleSearch = () => {
+    setSearchParams({
+      search,
+      youtubeSearch,
+      selectedTag,
+      sortBy,
+      sortOrder,
+      page: 1,
+    });
+  };
+
+  const totalPages = Math.ceil((stations?.total ?? 0) / pageSize) || 1;
+  const hasNextPage = searchParams.page < totalPages;
 
   return (
     <PageWrapper title="Browse Stations">
@@ -59,6 +83,16 @@ export default function BrowseStationsPage() {
               value={youtubeSearch}
             />
           </div>
+          <div className="flex flex-col space-y-2">
+            <label className="text-sm font-medium">Filter by Tag</label>
+            <div className="flex flex-wrap gap-2">
+              {tags?.map((tag) => (
+                <Pill key={tag.id} className={`cursor-pointer ${selectedTag === tag.id ? "!bg-primary !text-primary-foreground" : ""}`} onClick={() => setSelectedTag(selectedTag === tag.id ? "" : tag.id)}>
+                  {tag.name}
+                </Pill>
+              ))}
+            </div>
+          </div>
 
           <div className="flex flex-col space-y-2">
             <label className="text-sm font-medium">Sort By</label>
@@ -80,7 +114,7 @@ export default function BrowseStationsPage() {
             </div>
           </div>
 
-          <Button onClick={() => setPage(1)} className="w-full">
+          <Button onClick={handleSearch} className="w-full">
             Search
           </Button>
         </CardContent>
@@ -113,13 +147,13 @@ export default function BrowseStationsPage() {
 
           {/* Pagination */}
           <div className="mt-4 flex justify-end items-center space-x-4">
-            <Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage((prev) => prev - 1)}>
+            <Button variant="outline" size="sm" disabled={searchParams.page === 1} onClick={() => setSearchParams((prev) => ({ ...prev, page: prev.page - 1 }))}>
               Previous
             </Button>
             <span className="text-sm">
-              Page {page} of {totalPages}
+              Page {searchParams.page} of {totalPages}
             </span>
-            <Button variant="outline" size="sm" disabled={!hasNextPage} onClick={() => setPage((prev) => prev + 1)}>
+            <Button variant="outline" size="sm" disabled={!hasNextPage} onClick={() => setSearchParams((prev) => ({ ...prev, page: prev.page + 1 }))}>
               Next
             </Button>
           </div>

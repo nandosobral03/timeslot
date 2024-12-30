@@ -6,3 +6,5 @@ export * from "./createStation";
 export * from "./getStationById";
 export * from "./updateStation";
 export * from "./getStationVideos";
+export * from "./toggleFollowStation";
+export * from "./getFollowedStations";

@@ -31,6 +31,7 @@ export default function MyStations({ stations }: { stations: RouterOutputs["stat
               scheduleItems={station.scheduleItems ?? []}
               isPublic={station.isPublic}
               shouldShowIfIsPublic
+              url={`/me/stations/${station.id}`}
             />
           ))}
         </div>

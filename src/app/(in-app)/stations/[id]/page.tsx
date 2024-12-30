@@ -21,5 +21,5 @@ export default async function StationPage({ params }: StationPageProps) {
     return notFound();
   }
 
-  return <StationDetails station={station} showButtons={["watch"]} showCurrentSchedule />;
+  return <StationDetails station={station} showButtons={["watch", "follow"]} showCurrentSchedule />;
 }

@@ -21,7 +21,7 @@ const routes: { icon: React.ReactNode; name: string; path: string; needsAuth: bo
   {
     icon: <Bookmark className="w-5 h-5" />,
     name: "Favorites",
-    path: "/favorites",
+    path: "/following",
     needsAuth: true,
   },
   {

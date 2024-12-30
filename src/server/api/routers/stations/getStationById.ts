@@ -1,7 +1,7 @@
-import { protectedProcedure } from "../../trpc";
+import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 
-export const getStationById = protectedProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
+export const getStationById = publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
   const station = await ctx.db.station.findUnique({
     where: {
       id: input.id,
@@ -18,6 +18,25 @@ export const getStationById = protectedProcedure.input(z.object({ id: z.string()
         },
       },
       tags: true,
+      followers: {
+        where: {
+          id: ctx.user?.id,
+        },
+        select: {
+          id: true,
+        },
+      },
+      user: {
+        select: {
+          displayName: true,
+          image: true,
+        },
+      },
+      _count: {
+        select: {
+          followers: true,
+        },
+      },
     },
   });
 

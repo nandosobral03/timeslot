@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,16 +9,32 @@ import type { RouterOutputs } from "@/trpc/react";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import VideoPreview from "@/app/(in-app)/stations/[id]/video-preview";
-
+import { api } from "@/trpc/react";
+import { toast } from "sonner";
+import useAuthGuard from "@/app/hooks/useAuthGuard";
+import { useState } from "react";
+import { SelectSeparator } from "@/components/ui/select";
 dayjs.extend(utc);
 
 interface StationDetailsProps {
   station: NonNullable<RouterOutputs["stations"]["getStationById"]>;
-  showButtons: ("edit" | "schedule" | "watch")[];
+  showButtons: ("edit" | "schedule" | "watch" | "follow")[];
   showCurrentSchedule?: boolean;
 }
 
-export default async function StationDetails({ station, showButtons = [], showCurrentSchedule = false }: StationDetailsProps) {
+export default function StationDetails({ station, showButtons = [], showCurrentSchedule = false }: StationDetailsProps) {
+  const withAuth = useAuthGuard();
+  const [isFollowing, setIsFollowing] = useState(station.followers.length > 0);
+  const { mutate: toggleFollow } = api.stations.toggleFollowStation.useMutation({
+    onSuccess: () => {
+      toast.success("Station follow status updated");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+      setIsFollowing(station.followers.length > 0);
+    },
+  });
+
   // Find current and next schedule items
   const now = dayjs().utc();
   const currentScheduleItem = station.scheduleItems.find((item) => {
@@ -37,30 +55,48 @@ export default async function StationDetails({ station, showButtons = [], showCu
     return false;
   });
 
+  const handleFollowClick = () => {
+    withAuth(() => {
+      setIsFollowing((prev) => !prev);
+      toggleFollow({ stationId: station.id });
+    });
+  };
+
   return (
     <PageWrapper title={station.name} showBackArrow>
       <Card>
         <CardHeader className="flex flex-row justify-between">
           <div className="flex flex-col gap-2">
             <CardTitle>{station.name}</CardTitle>
-            <CardDescription>{station.description}</CardDescription>
+            <CardDescription>
+              Created by {station.user.displayName}
+              <SelectSeparator className="bg-primary/50" />
+              <div className="mt-1">{station.description}</div>
+            </CardDescription>
           </div>
           <div className="flex flex-col gap-2">
-            {showButtons.includes("edit") && (
-              <Button variant="default">
-                <Link href={`/me/stations/${station.id}/edit`}>Edit</Link>
-              </Button>
-            )}
-            {showButtons.includes("schedule") && (
-              <Button variant="secondary">
-                <Link href={`/me/stations/${station.id}/schedule`}>Schedule</Link>
-              </Button>
-            )}
-            {showButtons.includes("watch") && (
-              <Button size="lg" asChild>
-                <Link href={`/stations/${station.id}/watch`}>Watch Now</Link>
-              </Button>
-            )}
+            <div className="grid grid-cols-2 gap-2">
+              {showButtons.includes("watch") && (
+                <Button asChild>
+                  <Link href={`/stations/${station.id}/watch`}>Watch Now</Link>
+                </Button>
+              )}
+              {showButtons.includes("follow") && (
+                <Button onClick={handleFollowClick} variant={isFollowing ? "secondary" : "outline"}>
+                  {isFollowing ? "Unfollow" : "Follow"}
+                </Button>
+              )}
+              {showButtons.includes("edit") && (
+                <Button variant="default">
+                  <Link href={`/me/stations/${station.id}/edit`}>Edit</Link>
+                </Button>
+              )}
+              {showButtons.includes("schedule") && (
+                <Button variant="secondary">
+                  <Link href={`/me/stations/${station.id}/schedule`}>Schedule</Link>
+                </Button>
+              )}
+            </div>
           </div>
         </CardHeader>
         {showCurrentSchedule ? (

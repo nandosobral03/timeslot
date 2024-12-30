@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import type { RouterOutputs } from "@/trpc/react";
 import { Users, Globe, Lock } from "lucide-react";
+import Pill from "../common/pill";
 
 dayjs.extend(utc);
 
@@ -18,9 +19,10 @@ interface StationCardProps {
   scheduleItems: Station["scheduleItems"];
   isPublic?: boolean;
   shouldShowIfIsPublic?: boolean;
+  url?: string;
 }
 
-const StationCard = ({ id, name, thumbnail, tags, followersCount, scheduleItems, isPublic = true, shouldShowIfIsPublic = false }: StationCardProps) => {
+const StationCard = ({ id, name, thumbnail, tags, followersCount, scheduleItems, isPublic = true, shouldShowIfIsPublic = false, url }: StationCardProps) => {
   // Calculate current video
   const now = dayjs().utc();
   const currentScheduleItem = scheduleItems.find((item) => {
@@ -34,7 +36,7 @@ const StationCard = ({ id, name, thumbnail, tags, followersCount, scheduleItems,
   });
 
   return (
-    <Link href={`/stations/${id}`}>
+    <Link href={url ?? `/stations/${id}`}>
       <div className="group relative overflow-hidden rounded-sm border bg-card transition-all duration-200 hover:shadow-lg border-primary border-2">
         <div className="aspect-video w-full overflow-hidden">
           <Image src={thumbnail} alt={name} width={400} height={225} className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105" />
@@ -51,10 +53,8 @@ const StationCard = ({ id, name, thumbnail, tags, followersCount, scheduleItems,
           </div>
 
           <div className="mt-3 flex flex-wrap gap-2">
-            {tags.map((tag) => (
-              <span key={tag.id} className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                {tag.name}
-              </span>
+            {tags.slice(0, 3).map((tag) => (
+              <Pill key={tag.id}>{tag.name}</Pill>
             ))}
           </div>
 
