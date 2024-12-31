@@ -66,7 +66,7 @@ const OrderedView = ({ items, onReorder }: OrderedViewProps) => {
           flatItems.map((item, index) => (
             <Reorder.Item
               value={item}
-              className="flex flex-col md:flex-row items-center justify-center border border-secondary rounded-md shadow-sm mb-1 w-full max-w-sm gap-2 md:items-stretch md:min-h-24 hover:bg-primary cursor-grab relative"
+              className="flex flex-col md:flex-row items-center justify-center border border-secondary rounded-md shadow-xs mb-1 w-full max-w-sm gap-2 md:items-stretch md:min-h-24 hover:bg-primary cursor-grab relative"
               key={item.id}
             >
               <img src={item.image} alt={item.title} className="w-full object-cover rounded-t-md md:rounded-l-md aspect-video pointer-events-none md:w-fit md:h-24" />

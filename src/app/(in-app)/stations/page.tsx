@@ -87,7 +87,7 @@ export default function BrowseStationsPage() {
             <label className="text-sm font-medium">Filter by Tag</label>
             <div className="flex flex-wrap gap-2">
               {tags?.map((tag) => (
-                <Pill key={tag.id} className={`cursor-pointer ${selectedTag === tag.id ? "!bg-primary !text-primary-foreground" : ""}`} onClick={() => setSelectedTag(selectedTag === tag.id ? "" : tag.id)}>
+                <Pill key={tag.id} className={`cursor-pointer ${selectedTag === tag.id ? "bg-primary! text-primary-foreground!" : ""}`} onClick={() => setSelectedTag(selectedTag === tag.id ? "" : tag.id)}>
                   {tag.name}
                 </Pill>
               ))}

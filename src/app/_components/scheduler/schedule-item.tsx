@@ -31,7 +31,7 @@ const ScheduleItem = ({
   const ItemContent = (
     <HoverCard openDelay={250}>
       <HoverCardTrigger asChild>
-        <div className={`relative w-full h-full p-2 bg-gradient-to-r ${gradientClass} rounded-md shadow-md ${item.isMovable ? "cursor-move" : "opacity-50"}`}>
+        <div className={`relative w-full h-full p-2 bg-linear-to-r/oklch ${gradientClass} rounded-md shadow-md ${item.isMovable ? "cursor-move" : "opacity-50"}`}>
           {item.isMovable && (
             <button
               onClick={(e) => {

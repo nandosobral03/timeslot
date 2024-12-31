@@ -26,7 +26,7 @@ export default function UpcomingVideoNotice({ upcomingVideo }: UpcomingVideoNoti
     <div className="absolute top-0 right-0 w-[32rem] h-32 m-12">
       <div className="bg-background/80 rounded-md p-4 flex gap-4">
         <Image src={upcomingVideo.video?.thumbnail || ""} width={128} height={96} alt="" className="rounded-md" />
-        <div className="flex flex-col gap-1 flex-grow">
+        <div className="flex flex-col gap-1 grow">
           <span className="text-primary text-md">Up next:</span>
           <div className="text-foreground text-sm">{upcomingVideo.video?.title || "Untitled"}</div>
           <div className="text-foreground text-sm w-full text-end">until {dayjs().add(upcomingVideo.duration, "second").format("h:mm A")}</div>

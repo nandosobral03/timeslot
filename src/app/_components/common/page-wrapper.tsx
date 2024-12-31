@@ -8,7 +8,7 @@ import ChangeTheme from "./change-theme";
 export default function PageWrapper({ children, title, showBackArrow = false, fullWidth = false }: { children: React.ReactNode; title?: string; showBackArrow?: boolean; fullWidth?: boolean }) {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <div className={cn("mx-auto p-4 flex flex-col gap-4 h-full w-full", fullWidth ? "w-full" : "max-w-screen-lg container")}>
+      <div className={cn("mx-auto p-4 flex flex-col gap-4 h-full w-full", fullWidth ? "w-full" : "max-w-(--breakpoint-lg) container")}>
         {title && (
           <div className="flex items-center gap-4 border-b border-foreground/10 pb-2 relative">
             {showBackArrow && (

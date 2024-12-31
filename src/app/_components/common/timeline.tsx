@@ -59,7 +59,7 @@ const Timeline: React.FC<TimelineProps> = ({ videos }) => {
             }}
             title={tooltipContent}
           >
-            <span className="px-2 whitespace-nowrap overflow-hidden overflow-ellipsis text-sm">{video.title}</span>
+            <span className="px-2 whitespace-nowrap overflow-hidden text-ellipsis text-sm">{video.title}</span>
             <div className="absolute invisible group-hover:visible bg-black text-white text-xs rounded px-2 py-1 bottom-full left-1/2 transform -translate-x-1/2 whitespace-pre-line w-48 mb-2">
               <img src={video.image} alt={video.title} className="w-full h-20 object-cover rounded mb-1" />
               <p className="font-medium mb-1">{video.title}</p>

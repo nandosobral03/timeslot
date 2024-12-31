@@ -16,10 +16,23 @@ import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 
 const getGradientColor = (id: string) => {
-  const colors = ["from-blue-500 to-cyan-500", "from-purple-500 to-pink-500", "from-green-500 to-emerald-500", "from-yellow-500 to-orange-500", "from-red-500 to-rose-500", "from-indigo-500 to-violet-500", "from-teal-500 to-green-500"];
-  // Use the string's characters to generate a consistent number
-  const sum = id.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  return colors[sum % colors.length]!;
+  if (id === "deadair") return "from-gray-700 to-gray-900";
+
+  const colors = [
+    "from-blue-500 to-cyan-500",
+    "from-orange-500 to-red-500",
+    "from-indigo-500 to-violet-500",
+    "from-emerald-500 to-green-500",
+    "from-fuchsia-500 to-pink-500",
+    "from-amber-500 to-yellow-500",
+    "from-yellow-500 to-orange-500",
+    "from-purple-500 to-blue-500",
+    "from-rose-500 to-red-500",
+    "from-teal-500 to-cyan-500",
+  ];
+  // Use djb2 hash algorithm for better distribution
+  const hash = id.split("").reduce((hash, char) => (hash << 5) + hash + char.charCodeAt(0), 5381);
+  return colors[Math.abs(hash) % colors.length]!;
 };
 
 type EmptySpace = { duration: number };

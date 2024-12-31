@@ -63,7 +63,7 @@ const StationCard = ({ id, name, thumbnail, tags, followersCount, scheduleItems,
               <div className="my-4 border-t border-primary" />
               <div className="rounded-lg bg-muted/50 p-2">
                 <div className="flex items-center gap-3">
-                  <div className="h-12 w-20 flex-shrink-0 overflow-hidden rounded-md">
+                  <div className="h-12 w-20 shrink-0 overflow-hidden rounded-md">
                     <Image src={currentScheduleItem.video.thumbnail} alt={currentScheduleItem.video.title} width={80} height={48} className="h-full w-full object-cover" />
                   </div>
                   <div className="flex min-w-0 flex-col">

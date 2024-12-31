@@ -12,9 +12,9 @@ const Login = () => {
         <LoginForm />
 
         <div className="flex items-center w-full -my-4">
-          <div className="flex-grow border-t border-gray" />
+          <div className="grow border-t border-gray" />
           <span className="mx-4 text-gray">or</span>
-          <div className="flex-grow border-t border-gray" />
+          <div className="grow border-t border-gray" />
         </div>
 
         <GoogleLogin />

@@ -60,7 +60,7 @@ export default function SleepControl({ onSleep, onWake }: { onSleep: () => void;
   return (
     <>
       {isSleeping && (
-        <div className="fixed inset-0 bg-black/90 z-[99999] flex items-center justify-center cursor-pointer" onClick={handleWake}>
+        <div className="fixed inset-0 bg-black/90 z-99999 flex items-center justify-center cursor-pointer" onClick={handleWake}>
           <p className="text-primary text-xl max-w-sm text-center">
             Sweet dreams
             <br />
@@ -70,13 +70,13 @@ export default function SleepControl({ onSleep, onWake }: { onSleep: () => void;
       )}
 
       {sleepTimer ? (
-        <div className="absolute top-4 right-4 z-[9999] flex items-center gap-2">
+        <div className="absolute top-4 right-4 z-9999 flex items-center gap-2">
           <Button variant="secondary" size="icon" onClick={cancelTimer} className="animate-pulse">
             <Timer className="h-4 w-4" />
           </Button>
         </div>
       ) : (
-        <Button variant="default" size="icon" className="absolute top-4 right-4 z-[9999]" onClick={() => setIsOpen(true)}>
+        <Button variant="default" size="icon" className="absolute top-4 right-4 z-9999" onClick={() => setIsOpen(true)}>
           <Moon className="h-6 w-6" />
         </Button>
       )}
