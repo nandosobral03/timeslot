@@ -1,7 +1,7 @@
-import { api } from "@/trpc/server";
-import StationCard from "@/app/_components/station/station-card";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import PageWrapper from "@/app/_components/common/page-wrapper";
+import StationCard from "@/app/_components/station/station-card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { api } from "@/trpc/server";
 
 export default async function Home() {
   const popularStations = await api.homepage.getPopularStations();
@@ -11,7 +11,7 @@ export default async function Home() {
     <PageWrapper>
       <Card>
         <CardContent>
-          <CardTitle>Welcome to Timeslot</CardTitle>
+          <CardTitle className="mb-2">Welcome to Timeslot</CardTitle>
           <CardDescription>Your gateway to curated YouTube broadcasts! Create or tune in to any station broadcasting your favorite YouTube videos and channels at any time, all the time.</CardDescription>
         </CardContent>
       </Card>

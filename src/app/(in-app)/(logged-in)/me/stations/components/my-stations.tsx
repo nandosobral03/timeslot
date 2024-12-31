@@ -1,10 +1,10 @@
+import StationCard from "@/app/_components/station/station-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
 import type { RouterOutputs } from "@/trpc/react";
-import StationCard from "@/app/_components/station/station-card";
+import Link from "next/link";
 
-export default function MyStations({ stations }: { stations: RouterOutputs["stations"]["getMyStations"] }) {
+export default function UserStations({ stations, me = false }: { stations: RouterOutputs["stations"]["getUserStations"]; me?: boolean }) {
   return (
     <Card className="space-y-6">
       <CardHeader>
@@ -13,9 +13,11 @@ export default function MyStations({ stations }: { stations: RouterOutputs["stat
             <CardTitle>My Stations</CardTitle>
             <CardDescription>Manage your stations</CardDescription>
           </div>
-          <Button asChild>
-            <Link href="/me/stations/create">Create New Station</Link>
-          </Button>
+          {me && (
+            <Button asChild>
+              <Link href="/me/stations/create">Create New Station</Link>
+            </Button>
+          )}
         </div>
       </CardHeader>
       <CardContent>
@@ -31,7 +33,7 @@ export default function MyStations({ stations }: { stations: RouterOutputs["stat
               scheduleItems={station.scheduleItems ?? []}
               isPublic={station.isPublic}
               shouldShowIfIsPublic
-              url={`/me/stations/${station.id}`}
+              url={me ? `/me/stations/${station.id}` : `/stations/${station.id}`}
             />
           ))}
         </div>

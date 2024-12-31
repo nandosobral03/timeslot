@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
-import { useChat } from "./useChat";
+import useAuthGuard from "@/app/hooks/useAuthGuard";
 import dayjs from "dayjs";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useChat } from "./useChat";
 
 export default function Chat({ stationId }: { stationId: string }) {
   const [message, setMessage] = useState("");
@@ -10,6 +11,7 @@ export default function Chat({ stationId }: { stationId: string }) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const withAuth = useAuthGuard();
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const scrollToBottom = useCallback(() => {
@@ -34,8 +36,10 @@ export default function Chat({ stationId }: { stationId: string }) {
 
   const handleSend = () => {
     if (!message.trim()) return;
-    sendMessage(message);
-    setMessage("");
+    withAuth(() => {
+      sendMessage(message);
+      setMessage("");
+    });
   };
 
   return (

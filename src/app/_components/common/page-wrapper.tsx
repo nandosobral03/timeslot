@@ -1,8 +1,8 @@
 "use client";
 
-import { Suspense } from "react";
-import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ArrowLeft } from "lucide-react";
+import { Suspense } from "react";
 import ChangeTheme from "./change-theme";
 
 export default function PageWrapper({ children, title, showBackArrow = false, fullWidth = false }: { children: React.ReactNode; title?: string; showBackArrow?: boolean; fullWidth?: boolean }) {
@@ -16,7 +16,7 @@ export default function PageWrapper({ children, title, showBackArrow = false, fu
                 <ArrowLeft className="w-6 h-6" />
               </button>
             )}
-            {title && <h1 className="text-3xl font-extrabold text-foreground">{title}</h1>}
+            {title && <h1 className="text-3xl font-bold text-foreground">{title}</h1>}
           </div>
         )}
         <ChangeTheme />

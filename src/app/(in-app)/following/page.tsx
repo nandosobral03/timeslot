@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import PageWrapper from "@/app/_components/common/page-wrapper";
+import Pill from "@/app/_components/common/pill";
 import StationCard from "@/app/_components/station/station-card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { api } from "@/trpc/react";
-import PageWrapper from "@/app/_components/common/page-wrapper";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import Pill from "@/app/_components/common/pill";
+import { useState } from "react";
 
 export default function Following() {
   const [page, setPage] = useState(1);
@@ -37,7 +37,7 @@ export default function Following() {
     );
   }
 
-  const totalPages = Math.ceil((data?.total ?? 0) / 15);
+  const totalPages = Math.max(1, Math.ceil((data?.total ?? 0) / 15));
   const hasNextPage = page < totalPages;
 
   return (

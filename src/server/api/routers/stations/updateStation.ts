@@ -10,6 +10,7 @@ export const updateStation = protectedProcedure
       thumbnail: z.string(),
       tags: z.array(z.string()),
       videos: z.array(z.string()),
+      isPublic: z.boolean(),
     })
   )
   .mutation(async ({ ctx, input }) => {
@@ -31,6 +32,7 @@ export const updateStation = protectedProcedure
             data: input.videos.map((video) => ({ videoId: video, userId: ctx.user.id })),
           },
         },
+        isPublic: input.isPublic,
       },
     });
 

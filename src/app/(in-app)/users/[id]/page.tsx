@@ -2,20 +2,29 @@ import PageWrapper from "@/app/_components/common/page-wrapper";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { api } from "@/trpc/server";
 import Image from "next/image";
-import UpdateDisplayNameButton from "./profile/update-display-name-button";
-import UpdatePasswordButton from "./profile/update-password-button";
-import UserStations from "./stations/components/my-stations";
+import { redirect } from "next/navigation";
+import UserStations from "../../(logged-in)/me/stations/components/my-stations";
 
-export default async function MePage() {
-  const user = await api.users.getCurrentUser();
-  const stations = await api.stations.getMyStations();
-  if (!user) return null;
+export default async function UserProfilePage({ params }: { params: { id: string } }) {
+  const { id } = params;
+
+  // Fetch the user data based on the ID from the URL
+  const user = await api.users.getUserById(id);
+  const stations = await api.stations.getUserStations({ userId: id });
+  const currentUser = await api.users.getCurrentUser();
+
+  // Redirect to /me if the logged-in user is viewing their own profile
+  if (currentUser && currentUser.id === id) {
+    return redirect("/me");
+  }
+
+  if (!user) return <p>User not found</p>;
 
   return (
-    <PageWrapper title="Profile">
+    <PageWrapper title={`${user.displayName}'s Profile`}>
       <Card>
         <CardHeader>
-          <CardTitle>About me</CardTitle>
+          <CardTitle>About {user.displayName}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
@@ -25,13 +34,9 @@ export default async function MePage() {
               <p className="text-muted-foreground">{user.email}</p>
             </div>
           </div>
-          <div className="mt-8 flex flex-col sm:flex-row gap-4">
-            <UpdateDisplayNameButton />
-            {user.type === "credentials" && <UpdatePasswordButton />}
-          </div>
         </CardContent>
       </Card>
-      <UserStations stations={stations} me />
+      <UserStations stations={stations} />
     </PageWrapper>
   );
 }

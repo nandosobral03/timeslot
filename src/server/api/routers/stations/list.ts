@@ -1,9 +1,9 @@
 import { publicProcedure } from "@/server/api/trpc";
-import { z } from "zod";
+import { getCurrentTimeForScheduleItems } from "@/server/services/time";
+import type { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import type { Prisma } from "@prisma/client";
-import { getCurrentTimeForScheduleItems } from "@/server/services/time";
+import { z } from "zod";
 
 dayjs.extend(utc);
 
@@ -45,6 +45,7 @@ export const listStations = publicProcedure
           },
         },
       }),
+      isPublic: true,
       ...(channelId && {
         videos: {
           some: {
@@ -70,8 +71,7 @@ export const listStations = publicProcedure
               AND: [
                 {
                   startTime: {
-                    gte: currentTimeInWeek.subtract(1, "hour").toDate(), // Include videos that started up to 1 hour ago
-                    lte: currentTimeInWeek.add(2, "hours").toDate(), // Up to 2 hours in the future
+                    lte: currentTimeInWeek.add(2, "hours").toDate(),
                   },
                 },
               ],

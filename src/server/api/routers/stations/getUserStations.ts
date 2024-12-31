@@ -1,10 +1,11 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { protectedProcedure } from "../../trpc";
+import { z } from "zod";
+import { publicProcedure } from "../../trpc";
 
 dayjs.extend(utc);
 
-export const getMyStations = protectedProcedure.query(async ({ ctx }) => {
+export const getUserStations = publicProcedure.input(z.object({ userId: z.string() })).query(async ({ ctx, input }) => {
   // Get current time
   const now = dayjs().utc();
   const currentDayOfWeek = now.day();
@@ -18,7 +19,8 @@ export const getMyStations = protectedProcedure.query(async ({ ctx }) => {
 
   return await ctx.db.station.findMany({
     where: {
-      userId: ctx.user.id,
+      userId: input.userId,
+      isPublic: true,
     },
     include: {
       tags: true,

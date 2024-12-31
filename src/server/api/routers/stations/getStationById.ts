@@ -1,5 +1,5 @@
-import { publicProcedure } from "../../trpc";
 import { z } from "zod";
+import { publicProcedure } from "../../trpc";
 
 export const getStationById = publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
   const station = await ctx.db.station.findUnique({
@@ -20,7 +20,7 @@ export const getStationById = publicProcedure.input(z.object({ id: z.string() })
       tags: true,
       followers: {
         where: {
-          id: ctx.user?.id,
+          id: ctx.user?.id ?? "none",
         },
         select: {
           id: true,

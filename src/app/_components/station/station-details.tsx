@@ -1,20 +1,20 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import VideoPreview from "@/app/(in-app)/stations/[id]/video-preview";
 import PageWrapper from "@/app/_components/common/page-wrapper";
+import Pill from "@/app/_components/common/pill";
+import useAuthGuard from "@/app/hooks/useAuthGuard";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { SelectSeparator } from "@/components/ui/select";
 import type { RouterOutputs } from "@/trpc/react";
+import { api } from "@/trpc/react";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import VideoPreview from "@/app/(in-app)/stations/[id]/video-preview";
-import { api } from "@/trpc/react";
-import { toast } from "sonner";
-import useAuthGuard from "@/app/hooks/useAuthGuard";
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
-import { SelectSeparator } from "@/components/ui/select";
-import Pill from "@/app/_components/common/pill";
+import { toast } from "sonner";
 dayjs.extend(utc);
 
 interface StationDetailsProps {
@@ -70,7 +70,10 @@ export default function StationDetails({ station, showButtons = [], showCurrentS
           <div className="flex flex-col gap-2">
             <CardTitle>{station.name}</CardTitle>
             <CardDescription>
-              Created by {station.user.displayName}
+              Created by{" "}
+              <Link href={`/users/${station.userId}`} className="hover:text-primary">
+                {station.user.displayName}
+              </Link>
               <SelectSeparator className="bg-primary/50" />
               <div className="mt-1">{station.description}</div>
             </CardDescription>
@@ -103,13 +106,7 @@ export default function StationDetails({ station, showButtons = [], showCurrentS
         {showCurrentSchedule ? (
           <CardContent className="flex flex-col gap-4">
             {station.thumbnail && <Image src={station.thumbnail} alt={station.name} width={300} height={169} className="rounded-md bg-white" />}
-            <div className="flex flex-wrap gap-2">
-              {station.tags?.map((tag) => (
-                <Pill key={tag.id} variant="secondary">
-                  {tag.name}
-                </Pill>
-              ))}
-            </div>
+            <div className="flex flex-wrap gap-2">{station.tags?.map((tag) => <Pill key={tag.id}>{tag.name}</Pill>)}</div>
 
             <div className="space-y-4">
               {currentScheduleItem && <VideoPreview video={currentScheduleItem.video ?? undefined} startTime={currentScheduleItem.startTime} now={now.valueOf()} duration={currentScheduleItem.duration} type="now" />}

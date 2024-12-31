@@ -5,6 +5,9 @@ export const getPopularStations = publicProcedure.query(async ({ ctx }) => {
   const { currentTimeInWeek, currentDayOfWeek } = getCurrentTimeForScheduleItems();
 
   const stations = await ctx.db.station.findMany({
+    where: {
+      isPublic: true,
+    },
     include: {
       tags: true,
       _count: {
@@ -16,7 +19,6 @@ export const getPopularStations = publicProcedure.query(async ({ ctx }) => {
           AND: [
             {
               startTime: {
-                gte: currentTimeInWeek.subtract(1, "hour").toDate(),
                 lte: currentTimeInWeek.add(2, "hours").toDate(),
               },
             },
