@@ -157,7 +157,7 @@ export default function Scheduler({ items: initialItems, stationId }: SchedulerP
   };
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-4">
       <Card>
         <CardHeader>
           <CardTitle>Schedule</CardTitle>
@@ -192,26 +192,35 @@ export default function Scheduler({ items: initialItems, stationId }: SchedulerP
           </div>
         </CardContent>
       </Card>
+      <div className="hidden [@media(min-width:1200px)]:block">
+        <ScheduleActions items={items} setItems={setItems} stationId={stationId} />
 
-      <ScheduleActions items={items} setItems={setItems} stationId={stationId} />
+        {isScheduleView ? (
+          <Card className="flex-1 flex relative mx-auto w-full" style={{ maxWidth: `${7 * DAY_WIDTH}px` }}>
+            <TimeColumn hourHeight={HOUR_HEIGHT} />
+            {DAYS.map((day, dayIndex) => (
+              <DayColumn key={day} day={day} dayWidth={DAY_WIDTH} hourHeight={HOUR_HEIGHT} items={itemsByDay[dayIndex] ?? []} onUpdate={(newOrder) => handleReorder(newOrder, dayIndex)} />
+            ))}
+          </Card>
+        ) : (
+          <Card>
+            <CardHeader>
+              <CardTitle>Ordered View</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <OrderedView items={itemsByDay} onReorder={handleReorderOrderedView} />
+            </CardContent>
+          </Card>
+        )}
+      </div>
 
-      {isScheduleView ? (
-        <Card className="flex-1 flex relative mx-auto w-full" style={{ maxWidth: `${7 * DAY_WIDTH}px` }}>
-          <TimeColumn hourHeight={HOUR_HEIGHT} />
-          {DAYS.map((day, dayIndex) => (
-            <DayColumn key={day} day={day} dayWidth={DAY_WIDTH} hourHeight={HOUR_HEIGHT} items={itemsByDay[dayIndex] ?? []} onUpdate={(newOrder) => handleReorder(newOrder, dayIndex)} />
-          ))}
-        </Card>
-      ) : (
+      <div className="[@media(min-width:1200px)]:hidden">
         <Card>
-          <CardHeader>
-            <CardTitle>Ordered View</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <OrderedView items={itemsByDay} onReorder={handleReorderOrderedView} />
+          <CardContent className="py-8">
+            <p className="text-center text-muted-foreground">The scheduler is not available on mobile devices. Please use a desktop or tablet with a screen width of at least 1200px.</p>
           </CardContent>
         </Card>
-      )}
+      </div>
     </div>
   );
 }

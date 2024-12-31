@@ -77,8 +77,28 @@ export default function ScheduleActions({ items, setItems, stationId }: Schedule
     setItems([...items, { ...randomVideo, id: crypto.randomUUID(), durationInSeconds: randomVideo.video.duration, index: items.length, image: randomVideo.video.thumbnail, title: randomVideo.video.title, videoId: randomVideo.videoId }]);
   };
 
+  const repeatSchedule = () => {
+    const totalDuration = items.reduce((acc, item) => acc + item.durationInSeconds, 0);
+    const weekInSeconds = 7 * 24 * 60 * 60;
+    let remainingTime = weekInSeconds - totalDuration;
+
+    const newItems = [...items];
+
+    while (remainingTime > 0) {
+      const nextBatch = items.map((item) => ({
+        ...item,
+        id: crypto.randomUUID(),
+        index: newItems.length,
+      }));
+      remainingTime -= totalDuration;
+      newItems.push(...nextBatch);
+    }
+
+    setItems(newItems);
+  };
+
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 mb-4">
       <Button variant="secondary" disabled={isFetching || isError} onClick={fillWithChannelVideos}>
         Fill With Videos
       </Button>
@@ -96,6 +116,14 @@ export default function ScheduleActions({ items, setItems, stationId }: Schedule
         }}
       >
         Shuffle
+      </Button>
+
+      <Button variant="secondary" onClick={addRandomVideo}>
+        Add Random Video
+      </Button>
+
+      <Button variant="secondary" onClick={repeatSchedule}>
+        Repeat Schedule
       </Button>
 
       <Button
@@ -123,10 +151,6 @@ export default function ScheduleActions({ items, setItems, stationId }: Schedule
 
       <Button variant="secondary" onClick={() => setItems([])}>
         Clear
-      </Button>
-
-      <Button variant="secondary" onClick={addRandomVideo}>
-        Add Random Video
       </Button>
     </div>
   );
