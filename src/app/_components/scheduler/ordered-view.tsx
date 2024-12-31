@@ -41,7 +41,7 @@ const OrderedView = ({ items, onReorder }: OrderedViewProps) => {
     const newItem = {
       id: uuidv4(),
       image: "thumbnail" in video ? video.thumbnail : undefined,
-      title: "title" in video ? video.title : `Dead Air ${formatTime(video.duration)}`,
+      title: "title" in video ? video.title : `Dead Air`,
       index: clickedIndex,
       durationInSeconds: video.duration,
       isPartial: false,

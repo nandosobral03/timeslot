@@ -4,7 +4,6 @@ import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import isBetween from "dayjs/plugin/isBetween";
 import Scheduler from "../../../../../../_components/scheduler/scheduler";
-import { formatTime } from "@/lib/utils";
 import PageWrapper from "@/app/_components/common/page-wrapper";
 
 dayjs.extend(utc);
@@ -33,7 +32,7 @@ async function CalendarApp({ params }: CalendarAppProps) {
     .map((item, index) => ({
       id: item.id,
       image: item.video?.thumbnail,
-      title: item.video?.title ?? `Dead Air ${formatTime(item.duration)}`,
+      title: item.video?.title ?? `Dead Air`,
       index,
       durationInSeconds: item.duration,
       videoId: item.videoId ?? undefined,

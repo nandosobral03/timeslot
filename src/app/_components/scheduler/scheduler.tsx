@@ -53,20 +53,22 @@ const getItemsByDay = (items: SchedulerProps["items"]) => {
       const firstPart = SECONDS_IN_DAY - secondsSoFar;
       const secondPart = item.durationInSeconds - firstPart;
 
-      itemsByDay[currentDay]!.push({
-        ...item,
-        durationInSeconds: firstPart,
-        isPartial: true,
-        originalDuration: item.durationInSeconds,
-        isMovable: true,
-      });
-      itemsByDay[currentDay + 1]!.push({
-        ...item,
-        durationInSeconds: secondPart,
-        isPartial: true,
-        originalDuration: item.durationInSeconds,
-        isMovable: false,
-      });
+      if (currentDay + 1 < itemsByDay.length) {
+        itemsByDay[currentDay]!.push({
+          ...item,
+          durationInSeconds: firstPart,
+          isPartial: true,
+          originalDuration: item.durationInSeconds,
+          isMovable: true,
+        });
+        itemsByDay[currentDay + 1]!.push({
+          ...item,
+          durationInSeconds: secondPart,
+          isPartial: true,
+          originalDuration: item.durationInSeconds,
+          isMovable: false,
+        });
+      }
 
       secondsSoFar = secondPart;
       currentDay++;
@@ -82,6 +84,7 @@ const DAY_WIDTH = 150;
 export default function Scheduler({ items: initialItems, stationId }: SchedulerProps) {
   const [items, setItems] = useState(initialItems);
   const router = useRouter();
+  const { data: stationVideos, isFetching, isError } = api.stations.getStationVideos.useQuery({ stationId }, { enabled: !!stationId });
 
   const [isScheduleView, setIsScheduleView] = useState(true);
   const itemsByDay = useMemo(() => getItemsByDay(items), [items]);
@@ -103,11 +106,24 @@ export default function Scheduler({ items: initialItems, stationId }: SchedulerP
 
   const updateSchedule = api.schedule.updateVideoAtTimeForStation.useMutation();
   const saveSchedule = () => {
+    // Merge consecutive dead items (no video) by combining their durations
+    const mergedItems = items.reduce((acc: typeof items, curr) => {
+      const lastItem = acc[acc.length - 1];
+      if (lastItem && !lastItem.videoId && !curr.videoId) {
+        // Merge with previous dead item
+        lastItem.durationInSeconds += curr.durationInSeconds;
+        return acc;
+      }
+      acc.push(curr);
+      return acc;
+    }, []);
+
     updateSchedule.mutate(
-      { stationId, items: items.map((item) => ({ id: item.id, videoId: item.videoId, durationInSeconds: item.durationInSeconds })) },
+      { stationId, items: mergedItems.map((item) => ({ id: item.id, videoId: item.videoId, durationInSeconds: item.durationInSeconds })) },
       {
         onSuccess: () => {
           toast.success("Schedule updated successfully!");
+          setItems(mergedItems);
           router.refresh();
         },
         onError: () => {
@@ -115,6 +131,47 @@ export default function Scheduler({ items: initialItems, stationId }: SchedulerP
         },
       }
     );
+  };
+
+  const fillWithChannelVideos = () => {
+    if (isFetching || isError || !stationVideos) return;
+
+    let durationToFill = SECONDS_IN_DAY * 7 - items.reduce((acc, item) => acc + item.durationInSeconds, 0);
+    const tempVideos = [...items];
+
+    // Track count of each video
+    const videoCount = new Map<string, number>();
+    tempVideos.forEach((item) => {
+      if (item.videoId) {
+        videoCount.set(item.videoId, (videoCount.get(item.videoId) || 0) + 1);
+      }
+    });
+
+    while (durationToFill > 0) {
+      // Sort videos by count (least used first)
+      const sortedVideos = [...stationVideos].sort((a, b) => {
+        const countA = videoCount.get(a.videoId) || 0;
+        const countB = videoCount.get(b.videoId) || 0;
+        return countA - countB;
+      });
+
+      const nextVideo = sortedVideos[0];
+      if (!nextVideo) break;
+
+      durationToFill -= nextVideo.video.duration;
+      videoCount.set(nextVideo.videoId, (videoCount.get(nextVideo.videoId) || 0) + 1);
+
+      tempVideos.push({
+        ...nextVideo,
+        id: crypto.randomUUID(),
+        durationInSeconds: nextVideo.video.duration,
+        index: items.length,
+        image: nextVideo.video.thumbnail,
+        title: nextVideo.video.title,
+        videoId: nextVideo.videoId,
+      });
+    }
+    setItems(tempVideos);
   };
 
   return (
@@ -153,6 +210,50 @@ export default function Scheduler({ items: initialItems, stationId }: SchedulerP
           </div>
         </CardContent>
       </Card>
+      <div className="flex gap-2">
+        <Button variant="secondary" disabled={isFetching || isError} onClick={() => fillWithChannelVideos()}>
+          Fill Empty Space
+        </Button>
+
+        <Button
+          variant="secondary"
+          onClick={() => {
+            const shuffled = [...items]
+              .sort(() => Math.random() - 0.5)
+              .map((item, index) => ({
+                ...item,
+                index,
+              }));
+            setItems(shuffled);
+          }}
+        >
+          Shuffle
+        </Button>
+
+        <Button
+          variant="secondary"
+          onClick={() => {
+            const totalDuration = items.reduce((acc, item) => acc + item.durationInSeconds, 0);
+            const remainingTime = 7 * 24 * 60 * 60 - totalDuration; // Week in seconds
+
+            if (remainingTime > 0) {
+              const deadAir = {
+                id: crypto.randomUUID(),
+                title: "Dead Air",
+                durationInSeconds: remainingTime,
+                index: items.length,
+                image: undefined,
+                videoId: undefined,
+              };
+
+              setItems([...items, deadAir]);
+            }
+          }}
+        >
+          Fill with Dead Air
+        </Button>
+      </div>
+
       {isScheduleView ? (
         <Card className="flex-1 flex relative mx-auto w-full" style={{ maxWidth: `${7 * DAY_WIDTH}px` }}>
           <TimeColumn hourHeight={HOUR_HEIGHT} />

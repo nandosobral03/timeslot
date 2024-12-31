@@ -10,7 +10,6 @@ import type { Video } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { formatTime } from "@/lib/utils";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
@@ -53,7 +52,7 @@ const DayColumn = ({ day, dayWidth, hourHeight, items, onUpdate }: { day: string
     const newItem = {
       id: uuidv4(),
       image: "thumbnail" in video ? video.thumbnail : undefined,
-      title: "title" in video ? video.title : `Dead Air ${formatTime(video.duration)}`,
+      title: "title" in video ? video.title : `Dead Air`,
       index: clickedIndex,
       durationInSeconds: video.duration,
       isPartial: false,
