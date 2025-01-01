@@ -29,7 +29,7 @@ const authenticateAndGetStation = async (req: NextRequest, stationId: string) =>
 };
 
 const addVideoToStation = async (req: NextRequest, { params }: { params: { id: string; videoId: string } }) => {
-  const { id, videoId } = params;
+  const { id, videoId } = await params;
 
   const auth = await authenticateAndGetStation(req, id);
   if ("error" in auth) return auth.error;
@@ -45,11 +45,11 @@ const addVideoToStation = async (req: NextRequest, { params }: { params: { id: s
     },
   });
 
-  return new NextResponse("Video Added", { status: 201 });
+  return NextResponse.json({ message: "Video Added" }, { status: 201 });
 };
 
 const deleteVideoFromStation = async (req: NextRequest, { params }: { params: { id: string; videoId: string } }) => {
-  const { id, videoId } = params;
+  const { id, videoId } = await params;
 
   const auth = await authenticateAndGetStation(req, id);
   if ("error" in auth) return auth.error;
@@ -66,7 +66,7 @@ const deleteVideoFromStation = async (req: NextRequest, { params }: { params: { 
     },
   });
 
-  return new NextResponse("Video Deleted", { status: 200 });
+  return NextResponse.json({ message: "Video Deleted" }, { status: 200 });
 };
 
 export { deleteVideoFromStation as DELETE, addVideoToStation as POST };
