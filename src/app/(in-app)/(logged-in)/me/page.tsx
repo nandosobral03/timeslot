@@ -2,6 +2,7 @@ import PageWrapper from "@/app/_components/common/page-wrapper";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { api } from "@/trpc/server";
 import Image from "next/image";
+import CreateConnectionAPIKeyButton from "./profile/create-conection-api-key-button";
 import UpdateDisplayNameButton from "./profile/update-display-name-button";
 import UpdatePasswordButton from "./profile/update-password-button";
 import UserStations from "./stations/components/my-stations";
@@ -28,6 +29,7 @@ export default async function MePage() {
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <UpdateDisplayNameButton />
             {user.type === "credentials" && <UpdatePasswordButton />}
+            <CreateConnectionAPIKeyButton />
           </div>
         </CardContent>
       </Card>
