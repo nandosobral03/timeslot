@@ -3,7 +3,7 @@ import { Google } from "arctic";
 import { env } from "@/env";
 import { db } from "../db";
 
-export const google = new Google(env.GOOGLE_CLIENT_ID ?? "", env.GOOGLE_CLIENT_SECRET ?? "", `${env.VERCEL_URL}/auth/google/callback`);
+export const google = new Google(env.GOOGLE_CLIENT_ID ?? "", env.GOOGLE_CLIENT_SECRET ?? "", `https://timeslot.aornum.xyz/auth/google/callback`);
 
 export const createGoogleUser = async (googleId: string, email: string, name: string, picture: string) => {
   const existingUser = await db.user.findUnique({
