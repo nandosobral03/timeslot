@@ -31,6 +31,7 @@ model User {
   googleUser      GoogleUser?
 
   chatMessages ChatMessage[]
+  extensionAPIKey String? @unique
 }
 
 model CredentialsUser {
@@ -64,12 +65,10 @@ model Station {
   createdAt     DateTime       @default(now())
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade, name: "creator")
   isPublic      Boolean        @default(false)
-  isRandomized  Boolean        @default(false)
   tags          Tag[]
   scheduleItems ScheduleItem[]
   videos        VideoStation[]
   comments      Comment[]
-  adClip        String?        @default("default-ad.mp4")
   chatMessages  ChatMessage[]
 
   followers     User[]         @relation("station-followers")

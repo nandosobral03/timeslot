@@ -1,8 +1,8 @@
-import { z } from "zod";
 import { protectedProcedure } from "@/server/api/trpc";
+import { getCurrentTimeForScheduleItems } from "@/server/services/time";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { getCurrentTimeForScheduleItems } from "@/server/services/time";
+import { z } from "zod";
 
 dayjs.extend(utc);
 
@@ -51,8 +51,7 @@ export const getFollowedStations = protectedProcedure
               AND: [
                 {
                   startTime: {
-                    gte: currentTimeInWeek.subtract(1, "hour").toDate(), // Include videos that started up to 1 hour ago
-                    lte: currentTimeInWeek.add(2, "hours").toDate(), // Up to 2 hours in the future
+                    lte: currentTimeInWeek.add(2, "hours").toDate(),
                   },
                 },
               ],
