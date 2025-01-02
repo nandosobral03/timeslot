@@ -9,7 +9,7 @@ import { Toaster } from "sonner";
 export const metadata: Metadata = {
   title: "Timeslot",
   description: "Watch youtube as if it were on live tv",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/favicon.png" }],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
