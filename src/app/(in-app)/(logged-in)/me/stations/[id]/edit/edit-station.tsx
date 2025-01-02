@@ -18,10 +18,8 @@ export default function EditStation({ station, tagOptions }: { station: NonNulla
     followersCount: station.followersCount,
     tags: station.tags,
     userId: station.userId,
-    adClip: station.adClip,
     createdAt: station.createdAt,
     isPublic: isPublic,
-    isRandomized: station.isRandomized,
     videos: station.videos.map((video) => ({
       id: video.videoId,
       thumbnail: video.video.thumbnail,

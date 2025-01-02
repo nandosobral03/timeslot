@@ -19,7 +19,6 @@ export default function EditStationPage({ station, tagOptions, onSubmit, isLoadi
       description: station.description,
       thumbnail: station.thumbnail,
       isPublic: station.isPublic,
-      isRandomized: station.isRandomized,
       tags: station.tags,
       videos: station.videos,
     },

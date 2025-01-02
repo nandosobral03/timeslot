@@ -12,10 +12,9 @@ export default function CreateStation({ tagOptions }: { tagOptions: Tag[] }) {
     description: "",
     thumbnail: "",
     isPublic: false,
-    isRandomized: false,
-    adClip: null,
     tags: [],
     videos: [],
+    followersCount: 0,
   };
 
   const createStation = api.stations.createStation.useMutation();
