@@ -28,7 +28,6 @@ export default function EditStationPage({ station, tagOptions, onSubmit, isLoadi
         description: z.string(),
         thumbnail: z.string(),
         isPublic: z.boolean(),
-        isRandomized: z.boolean(),
         tags: z.array(z.object({ id: z.string(), name: z.string() })),
         videos: z.array(z.object({ id: z.string(), title: z.string() })),
       })
