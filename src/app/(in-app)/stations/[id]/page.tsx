@@ -7,9 +7,9 @@ import StationDetails from "@/app/_components/station/station-details";
 dayjs.extend(utc);
 
 interface StationPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function StationPage({ params }: StationPageProps) {

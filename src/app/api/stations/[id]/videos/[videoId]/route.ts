@@ -28,7 +28,7 @@ const authenticateAndGetStation = async (req: NextRequest, stationId: string) =>
   return { user, station };
 };
 
-const addVideoToStation = async (req: NextRequest, { params }: { params: { id: string; videoId: string } }) => {
+const addVideoToStation = async (req: NextRequest, { params }: { params: Promise<{ id: string; videoId: string }> }) => {
   const { id, videoId } = await params;
 
   const auth = await authenticateAndGetStation(req, id);
@@ -48,7 +48,7 @@ const addVideoToStation = async (req: NextRequest, { params }: { params: { id: s
   return NextResponse.json({ message: "Video Added" }, { status: 201 });
 };
 
-const deleteVideoFromStation = async (req: NextRequest, { params }: { params: { id: string; videoId: string } }) => {
+const deleteVideoFromStation = async (req: NextRequest, { params }: { params: Promise<{ id: string; videoId: string }> }) => {
   const { id, videoId } = await params;
 
   const auth = await authenticateAndGetStation(req, id);

@@ -5,8 +5,8 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import UserStations from "../../(logged-in)/me/stations/components/my-stations";
 
-export default async function UserProfilePage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function UserProfilePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
   // Fetch the user data based on the ID from the URL
   const user = await api.users.getUserById(id);

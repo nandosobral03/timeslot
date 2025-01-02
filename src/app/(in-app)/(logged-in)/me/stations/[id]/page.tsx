@@ -3,13 +3,13 @@ import { api } from "@/trpc/server";
 import StationDetails from "@/app/_components/station/station-details";
 
 interface StationPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function StationPage({ params }: StationPageProps) {
-  const { id } = params;
+  const { id } = await params;
 
   const station = await api.stations.getStationById({ id });
 

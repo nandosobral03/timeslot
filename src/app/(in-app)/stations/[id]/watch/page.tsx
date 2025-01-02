@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import PageWrapper from "@/app/_components/common/page-wrapper";
 import Chat from "@/app/_components/chat/chat";
 
-export default async function WatchPage({ params }: { params: { id: string } }) {
+export default async function WatchPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   const station = await api.stations.getStationById({ id });
