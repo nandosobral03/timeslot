@@ -12,7 +12,7 @@ export default function PageWrapper({ children, title, showBackArrow = false, fu
         {title && (
           <div className="flex items-center gap-4 border-b border-foreground/10 pb-2 relative">
             {showBackArrow && (
-              <button onClick={() => window.history.back()} className="text-primary hover:text-primary/80">
+              <button onClick={() => window.history.back()} className="text-primary hover:text-primary/80 cursor-pointer">
                 <ArrowLeft className="w-6 h-6" />
               </button>
             )}

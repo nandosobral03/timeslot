@@ -4,7 +4,6 @@ import useSession from "@/app/hooks/useSession";
 import { Bookmark, Home, LogIn, LogOut, Radio, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
 
 const routes: { icon: React.ReactNode; name: string; path: string; needsAuth: boolean }[] = [
   {
