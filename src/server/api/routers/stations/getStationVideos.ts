@@ -6,7 +6,7 @@ export const getStationVideos = protectedProcedure.input(z.object({ stationId: z
     where: {
       stationId: input.stationId,
     },
-    include: {
+    select: {
       video: true,
     },
   });

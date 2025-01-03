@@ -117,7 +117,7 @@ export default function AddVideoAtTimeModal({ isOpen, onClose, onVideoSelected }
             <div className="col-span-full text-center text-gray-500 py-8">No videos found for this station. Add some before creating a schedule.</div>
           ) : (
             data?.map((videoStation) => (
-              <div key={videoStation.videoId} className="flex flex-col overflow-hidden rounded-lg border cursor-pointer hover:border-gray-400 transition-colors" onClick={() => onVideoSelected(videoStation.video)}>
+              <div key={videoStation.video.id} className="flex flex-col overflow-hidden rounded-lg border cursor-pointer hover:border-gray-400 transition-colors" onClick={() => onVideoSelected(videoStation.video)}>
                 <img src={videoStation.video.thumbnail} alt={videoStation.video.title} className="h-40 w-full object-cover" />
                 <div className="p-4">
                   <h3 className="font-semibold">{videoStation.video.title}</h3>

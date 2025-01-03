@@ -46,8 +46,8 @@ export default function ScheduleActions({ items, setItems, stationId }: Schedule
     while (durationToFill > 0) {
       // Sort videos by count (least used first)
       const sortedVideos = [...stationVideos].sort((a, b) => {
-        const countA = videoCount.get(a.videoId) || 0;
-        const countB = videoCount.get(b.videoId) || 0;
+        const countA = videoCount.get(a.video.id) || 0;
+        const countB = videoCount.get(b.video.id) || 0;
         return countA - countB;
       });
 
@@ -55,7 +55,7 @@ export default function ScheduleActions({ items, setItems, stationId }: Schedule
       if (!nextVideo) break;
 
       durationToFill -= nextVideo.video.duration;
-      videoCount.set(nextVideo.videoId, (videoCount.get(nextVideo.videoId) || 0) + 1);
+      videoCount.set(nextVideo.video.id, (videoCount.get(nextVideo.video.id) || 0) + 1);
 
       tempVideos.push({
         ...nextVideo,
@@ -64,7 +64,7 @@ export default function ScheduleActions({ items, setItems, stationId }: Schedule
         index: items.length,
         image: nextVideo.video.thumbnail,
         title: nextVideo.video.title,
-        videoId: nextVideo.videoId,
+        videoId: nextVideo.video.id,
       });
     }
     setItems(tempVideos);
@@ -74,7 +74,7 @@ export default function ScheduleActions({ items, setItems, stationId }: Schedule
     if (isFetching || isError || !stationVideos) return;
     const randomVideo = stationVideos[Math.floor(Math.random() * stationVideos.length)];
     if (!randomVideo) return;
-    setItems([...items, { ...randomVideo, id: crypto.randomUUID(), durationInSeconds: randomVideo.video.duration, index: items.length, image: randomVideo.video.thumbnail, title: randomVideo.video.title, videoId: randomVideo.videoId }]);
+    setItems([...items, { ...randomVideo, id: crypto.randomUUID(), durationInSeconds: randomVideo.video.duration, index: items.length, image: randomVideo.video.thumbnail, title: randomVideo.video.title, videoId: randomVideo.video.id }]);
   };
 
   const repeatSchedule = () => {
