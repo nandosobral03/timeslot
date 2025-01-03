@@ -67,7 +67,7 @@ export default function StationDetails({ station, showButtons = [], showCurrentS
     <PageWrapper title={station.name} showBackArrow>
       <Card>
         <CardHeader className="flex flex-row justify-between">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 max-w-md">
             <CardTitle>{station.name}</CardTitle>
             <CardDescription>
               Created by{" "}
