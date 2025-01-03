@@ -52,6 +52,7 @@ export const getFollowedStations = protectedProcedure
                 {
                   startTime: {
                     lte: currentTimeInWeek.add(2, "hours").toDate(),
+                    gte: currentTimeInWeek.subtract(4, "hours").toDate(),
                   },
                 },
               ],
@@ -59,6 +60,7 @@ export const getFollowedStations = protectedProcedure
             include: {
               video: true,
             },
+            take: 5,
             orderBy: {
               startTime: "asc",
             },

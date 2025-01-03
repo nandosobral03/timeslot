@@ -20,6 +20,7 @@ export const getPopularStations = publicProcedure.query(async ({ ctx }) => {
             {
               startTime: {
                 lte: currentTimeInWeek.add(2, "hours").toDate(),
+                gte: currentTimeInWeek.subtract(4, "hours").toDate(),
               },
             },
           ],
@@ -27,6 +28,7 @@ export const getPopularStations = publicProcedure.query(async ({ ctx }) => {
         include: {
           video: true,
         },
+        take: 5,
         orderBy: {
           startTime: "asc",
         },

@@ -1,20 +1,12 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { protectedProcedure } from "../../trpc";
+import { getCurrentTimeForScheduleItems } from "@/server/services/time";
 
 dayjs.extend(utc);
 
 export const getMyStations = protectedProcedure.query(async ({ ctx }) => {
-  // Get current time
-  const now = dayjs().utc();
-  const currentDayOfWeek = now.day();
-
-  // Calculate seconds since start of day
-  const secondsSinceMidnight = now.hour() * 3600 + now.minute() * 60 + now.second();
-
-  // Calculate the reference time (Unix timestamp 0 + seconds for current time of day)
-  const referenceTime = dayjs.unix(0).add(secondsSinceMidnight, "second");
-  const twoHoursFromReference = referenceTime.add(2, "hours");
+  const { currentTimeInWeek, currentDayOfWeek } = getCurrentTimeForScheduleItems();
 
   return await ctx.db.station.findMany({
     where: {
@@ -31,7 +23,8 @@ export const getMyStations = protectedProcedure.query(async ({ ctx }) => {
           AND: [
             {
               startTime: {
-                lte: twoHoursFromReference.toDate(),
+                lte: currentTimeInWeek.add(2, "hours").toDate(),
+                gte: currentTimeInWeek.subtract(4, "hours").toDate(),
               },
             },
           ],
