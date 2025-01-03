@@ -9,3 +9,4 @@ export * from "./list";
 export * from "./removeVideoFromStation";
 export * from "./toggleFollowStation";
 export * from "./updateStation";
+export * from "./deleteStation";

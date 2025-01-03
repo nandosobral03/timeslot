@@ -8,8 +8,8 @@ export const env = createEnv({
    */
   server: {
     DATABASE_URL: z.string().url(),
-    TURSO_DATABASE_URL: z.string().url(),
-    TURSO_AUTH_TOKEN: z.string(),
+    TURSO_DATABASE_URL: z.string().url().optional(),
+    TURSO_AUTH_TOKEN: z.string().optional(),
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
     PORT: z.coerce.number().default(3000),
     VERCEL_URL: z.string().optional(),
