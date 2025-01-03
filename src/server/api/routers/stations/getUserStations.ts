@@ -1,10 +1,6 @@
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import { z } from "zod";
 import { publicProcedure } from "../../trpc";
 import { getCurrentTimeForScheduleItems } from "@/server/services/time";
-
-dayjs.extend(utc);
 
 export const getUserStations = publicProcedure.input(z.object({ userId: z.string() })).query(async ({ ctx, input }) => {
   const { currentTimeInWeek, currentDayOfWeek } = getCurrentTimeForScheduleItems();

@@ -1,11 +1,7 @@
 import { publicProcedure } from "@/server/api/trpc";
 import { getCurrentTimeForScheduleItems } from "@/server/services/time";
 import type { Prisma } from "@prisma/client";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import { z } from "zod";
-
-dayjs.extend(utc);
 
 export const listStations = publicProcedure
   .input(
@@ -72,6 +68,7 @@ export const listStations = publicProcedure
                 {
                   startTime: {
                     lte: currentTimeInWeek.add(2, "hours").toDate(),
+                    gte: currentTimeInWeek.subtract(4, "hours").toDate(),
                   },
                 },
               ],
@@ -79,6 +76,7 @@ export const listStations = publicProcedure
             include: {
               video: true,
             },
+            take: 5,
             orderBy: {
               startTime: "asc",
             },

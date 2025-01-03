@@ -1,10 +1,6 @@
 import { protectedProcedure } from "@/server/api/trpc";
 import { getCurrentTimeForScheduleItems } from "@/server/services/time";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import { z } from "zod";
-
-dayjs.extend(utc);
 
 export const getFollowedStations = protectedProcedure
   .input(

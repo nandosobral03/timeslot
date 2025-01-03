@@ -1,9 +1,5 @@
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import { protectedProcedure } from "../../trpc";
 import { getCurrentTimeForScheduleItems } from "@/server/services/time";
-
-dayjs.extend(utc);
 
 export const getMyStations = protectedProcedure.query(async ({ ctx }) => {
   const { currentTimeInWeek, currentDayOfWeek } = getCurrentTimeForScheduleItems();
